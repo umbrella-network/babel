@@ -24,16 +24,22 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: yarn install
+    - run: npm install
     - name: Compile contracts
+      env:
+        RPC_URL: ${{ secrets.RPC_URL }}
+        UMB_CHAIN_ADDRESS: ${{ secrets.UMB_CHAIN_ADDRESS }}
       run: |
-        yarn compile
+        npm run compile
     - name: Unit tests
+      env:
+        RPC_URL: ${{ secrets.RPC_URL }}
+        UMB_CHAIN_ADDRESS: ${{ secrets.UMB_CHAIN_ADDRESS }}
       run: |
-        yarn test
+        npm run test
     - name: Solidity Lint
       run: |
-        yarn lint:sol
+        npm run lint:sol
     - name: JS Lint
       run: |
-        yarn lint:ts
+        npm run lint:ts
