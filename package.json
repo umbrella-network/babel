@@ -5,13 +5,12 @@
   "main": "index.js",
   "scripts": {
     "clear": "rm -rf cache artifacts deployments",
-    "compile": "yarn hardhat compile",
-    "lint": "yarn lint:ts && yarn lint:sol",
+    "compile": "hardhat compile",
+    "lint": "npm run lint:ts && npm run lint:sol",
     "lint:ts": "eslint . --ext .js,.jsx,.ts",
-    "lint:fix": "yarn lint:ts -- --fix",
+    "lint:fix": "npm run lint:ts -- --fix",
     "lint:sol": "solhint \"contracts/**/*.sol\" --max-warnings=0",
-    "pre-commit": "lint-staged",
-    "test": "yarn hardhat test"
+    "test": "hardhat test"
   },
   "repository": {
     "type": "git",
@@ -32,7 +31,9 @@
     "@types/node": "^14.14.22",
     "@typescript-eslint/eslint-plugin": "^4.14.1",
     "@typescript-eslint/parser": "^4.14.1",
+    "@umb-network/toolbox": "~0.7.1",
     "chai": "^4.3.0",
+    "custom-env": "^2.0.1",
     "eslint": "^7.18.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
@@ -41,10 +42,9 @@
     "eslint-plugin-standard": "^5.0.0",
     "ethereum-waffle": "^3.3.0",
     "ethers": "^5.0.31",
+    "git-format-staged": "^2.1.1",
     "hardhat": "^2.0.11",
-    "hardhat-deploy": "^0.7.0-beta.44",
-    "hardhat-deploy-ethers": "^0.3.0-beta.7",
-    "lint-staged": "^10.5.4",
+    "husky": "4.3.8",
     "prettier": "^2.2.1",
     "solc": "^0.8.0",
     "solhint": "^3.3.2",
@@ -52,9 +52,11 @@
     "typescript": "^4.1.3",
     "web3": "^1.3.4"
   },
-  "pre-commit": [
-    "pre-commit"
-  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "git-format-staged -f 'prettier --ignore-unknown --stdin --stdin-filepath \"{}\"' ."
+    }
+  },
   "engines": {
     "node": ">=12.18.0"
   }
