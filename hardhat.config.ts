@@ -15,12 +15,12 @@ const config: HardhatUserConfig = {
       forking: {
         url: process.env.RPC_URL as string,
       }
-    },
+    }
   },
   solidity: {
     compilers: [
       {
-        version: '0.6.8'
+        version: '0.7.5'
       },
     ]
   },
