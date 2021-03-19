@@ -3,29 +3,30 @@ import {expect} from 'chai';
 import {Contract} from 'ethers';
 import {converters} from '@umb-network/toolbox';
 
-const {UMB_CHAIN_ADDRESS} = process.env;
+// Chain registry address (see https://umbrella-network.readme.io/docs/umb-token-contracts)
+const UMB_REGISTRY_ADDRESS = '0x8d16D5D2859f4c54b226180A46F26D57A4d727A0';
 
 const setup = async (): Promise<Contract> => {
-  if (!UMB_CHAIN_ADDRESS) {
-    throw Error('Please setup UMB_CHAIN_ADDRESS in .env file');
-  }
-
   const YourContract = await ethers.getContractFactory('YourContract');
-  const yourContract = await YourContract.deploy(process.env.UMB_CHAIN_ADDRESS);
+  const yourContract = await YourContract.deploy(UMB_REGISTRY_ADDRESS);
   await yourContract.deployed();
   return yourContract;
 };
 
-describe('Umbrella First Class Data - Layer 1', function () {
+describe('Umbrella - Hello word examples for First Class Data - Layer 1', function () {
   let yourContract: Contract;
 
   before(async () => {
     yourContract = await setup();
   });
 
-  describe('getting latest numeric FCD', function () {
-    it('expect to get numeric data by key from UMB Chain', async function () {
-      expect(await yourContract.getLatestNumericFCD(converters.strToBytes32('BTC-USD'))).to.gt(0);
-    });
+  it('expect to present how to use Chain contract', async function () {
+    await yourContract.latestBlockInfo();
+  });
+
+  it('expect to get latest price for BTC-USD', async function () {
+    const price = await yourContract.getCurrentPrice(converters.strToBytes32('BTC-USD'));
+    console.log(price.toString());
+    expect(price).to.gt(0);
   });
 });
