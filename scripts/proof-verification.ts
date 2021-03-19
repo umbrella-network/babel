@@ -18,7 +18,7 @@ async function main() {
       'ETH-USD'
     );
 
-    console.log(verificationResult) // output: {success: true, value: 1234} or {success: false, value: 1234}  
+    console.log(verificationResult); // output: {success: true, value: 1234} or {success: false, value: 1234}
   }
 }
 
