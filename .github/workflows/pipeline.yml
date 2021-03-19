@@ -43,6 +43,9 @@ jobs:
     - name: JS Lint
       run: |
         npm run lint:ts
+    - name: Run hardhat tests
+      run: |
+        npx hardhat test
     - name: Run coders examples
       run: |
         npx hardhat run scripts/coders.ts
