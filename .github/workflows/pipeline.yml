@@ -43,3 +43,28 @@ jobs:
     - name: JS Lint
       run: |
         npm run lint:ts
+    - name: Run hardhat tests
+      env:
+        RPC_URL: ${{ secrets.RPC_URL }}
+      run: |
+        npx hardhat test
+    - name: Run coders examples
+      run: |
+        npx hardhat run scripts/coders.ts
+    - name: Run converters examples
+      run: |
+        npx hardhat run scripts/converters.ts
+    - name: Run API Client examples
+      env:
+        RPC_URL: ${{ secrets.RPC_URL }}
+        UMB_CHAIN_ADDRESS: ${{ secrets.UMB_CHAIN_ADDRESS }}
+        API_KEY: ${{ secrets.APY_KEY }}
+      run: |
+        npx hardhat run scripts/api-client.ts
+    - name: Run proof verification example
+      env:
+        RPC_URL: ${{ secrets.RPC_URL }}
+        UMB_CHAIN_ADDRESS: ${{ secrets.UMB_CHAIN_ADDRESS }}
+        API_KEY: ${{ secrets.APY_KEY }}
+      run: |
+        npx hardhat run scripts/proof-verification.ts

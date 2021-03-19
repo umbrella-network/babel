@@ -4,16 +4,27 @@
 
 Umbrella Network Reference Application
 
-## Setup
+
+# Setup
+
+Install packages.
 
 ```shell
 git clone git@github.com:umbrella-network/babel.git
 npm install
 ```
 
-## Run examples
+Setup a dotenv file (`.env`) with local configuration values. Example:
 
-### First Class Data
+```
+RPC_URL=https://ropsten.infura.io/v3/*** # RPC provider eg. infura
+UMB_CHAIN_ADDRESS=0x10816eA91c8001B3a3890e8c597c5972b4E4aBfC # UMBrella Chain contract address
+API_KEY=0xXXXXXXX # UMBrella API Key
+```
+
+# Run examples
+
+## First Class Data
 
 For running FCD example, you need to have RPC provider URL
 and you need to setup it into `.env`, see `example.env`.
@@ -45,4 +56,29 @@ minter: 0xdc3ebc37da53a644d67e5e3b5ba4eef88d969d5c
 
 
   2 passing (11s)
+```
+## Layer 2 Data
+
+Run coders examples:
+
+```shell script
+npx hardhat run scripts/coders.ts
+```
+
+Run converter examples:
+
+```shell script
+npx hardhat run scripts/converters.ts
+```
+
+Run API Client examples:
+
+```shell script
+npx hardhat run scripts/api-client.ts
+```
+
+Run a proof verification example:
+
+```shell script
+npx hardhat run scripts/proof-verification.ts
 ```
