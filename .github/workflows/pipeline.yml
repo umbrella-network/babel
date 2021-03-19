@@ -43,3 +43,15 @@ jobs:
     - name: JS Lint
       run: |
         npm run lint:ts
+    - name: Run coders examples
+      run: |
+        npx hardhat run scripts/coders.ts
+    - name: Run converters examples
+      run: |
+        npx hardhat run scripts/converters.ts
+    - name: Run API Client examples
+      run: |
+        npx hardhat run scripts/api-client.ts
+    - name: Run proof verification example
+      run: |
+        npx hardhat run scripts/proof-verification.ts
