@@ -44,6 +44,8 @@ jobs:
       run: |
         npm run lint:ts
     - name: Run hardhat tests
+      env:
+        RPC_URL: ${{ secrets.RPC_URL }}
       run: |
         npx hardhat test
     - name: Run coders examples
