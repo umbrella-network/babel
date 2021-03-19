@@ -50,8 +50,16 @@ jobs:
       run: |
         npx hardhat run scripts/converters.ts
     - name: Run API Client examples
+      env:
+        RPC_URL: ${{ secrets.RPC_URL }}
+        UMB_CHAIN_ADDRESS: ${{ secrets.UMB_CHAIN_ADDRESS }}
+        API_KEY: ${{ secrets.APY_KEY }}
       run: |
         npx hardhat run scripts/api-client.ts
     - name: Run proof verification example
+      env:
+        RPC_URL: ${{ secrets.RPC_URL }}
+        UMB_CHAIN_ADDRESS: ${{ secrets.UMB_CHAIN_ADDRESS }}
+        API_KEY: ${{ secrets.APY_KEY }}
       run: |
         npx hardhat run scripts/proof-verification.ts
