@@ -28,13 +28,19 @@ jobs:
     - name: Compile contracts
       env:
         RPC_URL: ${{ secrets.RPC_URL }}
-        UMB_CHAIN_ADDRESS: ${{ secrets.UMB_CHAIN_ADDRESS }}
+        UMB_REGISTRY_ADDRESS: ${{ secrets.UMB_REGISTRY_ADDRESS }}
       run: |
         npm run compile
-    - name: Unit tests
+    - name: Unit tests for ETH
       env:
         RPC_URL: ${{ secrets.RPC_URL }}
-        UMB_CHAIN_ADDRESS: ${{ secrets.UMB_CHAIN_ADDRESS }}
+        UMB_REGISTRY_ADDRESS: ${{ secrets.UMB_REGISTRY_ADDRESS }}
+      run: |
+        npm run test
+    - name: Unit tests for BSC
+      env:
+        RPC_URL: ${{ secrets.RPC_URL_BSC }}
+        UMB_REGISTRY_ADDRESS: ${{ secrets.UMB_REGISTRY_ADDRESS_BSC }}
       run: |
         npm run test
     - name: Solidity Lint

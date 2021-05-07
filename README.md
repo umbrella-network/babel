@@ -17,9 +17,14 @@ npm install
 Setup a dotenv file (`.env`) with local configuration values. Example:
 
 ```
-RPC_URL=https://ropsten.infura.io/v3/*** # RPC provider eg. infura
-UMB_CHAIN_ADDRESS=0x10816eA91c8001B3a3890e8c597c5972b4E4aBfC # UMBrella Chain contract address
-API_KEY=0xXXXXXXX # UMBrella API Key
+# RPC provider eg. infura
+RPC_URL=https://ropsten.infura.io/v3/***
+
+# UMBrella Contract Registry contract address for ropsten:
+UMB_REGISTRY_ADDRESS=0x8d16D5D2859f4c54b226180A46F26D57A4d727A0
+
+# UMBrella API Key:
+API_KEY=0xXXXXXXX
 ```
 
 # Run examples
@@ -29,7 +34,7 @@ API_KEY=0xXXXXXXX # UMBrella API Key
 For running FCD example, you need to have RPC provider URL
 and you need to setup it into `.env`, see `example.env`.
 
-**Note**: Provider URL needs to be for Kovan testnet.
+**Note**: Provider URL needs to be for Ropsten testnet.
 
 Then open console and run
 

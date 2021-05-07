@@ -4,10 +4,11 @@ import {Contract} from 'ethers';
 import {converters} from '@umb-network/toolbox';
 
 // Chain registry address (see https://umbrella-network.readme.io/docs/umb-token-contracts)
-const UMB_REGISTRY_ADDRESS = '0x8d16D5D2859f4c54b226180A46F26D57A4d727A0';
+const { UMB_REGISTRY_ADDRESS } = process.env;
 
 const setup = async (): Promise<Contract> => {
   const YourContract = await ethers.getContractFactory('YourContract');
+  console.log(`deploying contract with UMB_REGISTRY_ADDRESS=[${UMB_REGISTRY_ADDRESS}]`);
   const yourContract = await YourContract.deploy(UMB_REGISTRY_ADDRESS);
   await yourContract.deployed();
   return yourContract;
