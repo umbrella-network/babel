@@ -7,3 +7,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Unreleased
 ### Added
 - boilerplate
+- workflow for BSC
+- move Contract Registry address to env variables
