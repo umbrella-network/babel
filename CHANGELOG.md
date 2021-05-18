@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## Added
+- git actions pipeline for production and development for both blockchains
+
+## Changed
+- support optimised version of Umbrella:
+  - only latest FCDs
+  - minimum storage on chain
+
+## Fixed
+- fix usage of ENV variables
+
 ## [0.1.0] - 2021-05-14
 
 ### Added

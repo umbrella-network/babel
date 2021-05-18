@@ -1,13 +1,13 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Contracts Quality Test
+name: Reference App QA - Production
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ main ]
   pull_request:
-    branches: [ develop, main ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -15,62 +15,66 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [ 14.x ]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm install
-    - name: Compile contracts
-      env:
-        RPC_URL: ${{ secrets.RPC_URL }}
-        UMB_REGISTRY_ADDRESS: ${{ secrets.UMB_REGISTRY_ADDRESS }}
-      run: |
-        npm run compile
-    - name: Unit tests for ETH
-      env:
-        RPC_URL: ${{ secrets.RPC_URL }}
-        UMB_REGISTRY_ADDRESS: ${{ secrets.UMB_REGISTRY_ADDRESS }}
-      run: |
-        npm run test
-    - name: Unit tests for BSC
-      env:
-        RPC_URL: ${{ secrets.RPC_URL_BSC }}
-        UMB_REGISTRY_ADDRESS: ${{ secrets.UMB_REGISTRY_ADDRESS_BSC }}
-      run: |
-        npm run test
-    - name: Solidity Lint
-      run: |
-        npm run lint:sol
-    - name: JS Lint
-      run: |
-        npm run lint:ts
-    - name: Run hardhat tests
-      env:
-        RPC_URL: ${{ secrets.RPC_URL }}
-      run: |
-        npx hardhat test
-    - name: Run coders examples
-      run: |
-        npx hardhat run scripts/coders.ts
-    - name: Run converters examples
-      run: |
-        npx hardhat run scripts/converters.ts
-    - name: Run API Client examples
-      env:
-        RPC_URL: ${{ secrets.RPC_URL }}
-        UMB_CHAIN_ADDRESS: ${{ secrets.UMB_CHAIN_ADDRESS }}
-        API_KEY: ${{ secrets.APY_KEY }}
-      run: |
-        npx hardhat run scripts/api-client.ts
-    - name: Run proof verification example
-      env:
-        RPC_URL: ${{ secrets.RPC_URL }}
-        UMB_CHAIN_ADDRESS: ${{ secrets.UMB_CHAIN_ADDRESS }}
-        API_KEY: ${{ secrets.APY_KEY }}
-      run: |
-        npx hardhat run scripts/proof-verification.ts
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - name: Compile contracts
+        env:
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS }}
+        run: npm run compile
+      - name: Solidity Lint
+        run: npm run lint:sol
+      - name: JS Lint
+        run: npm run lint:ts
+      - name: Unit tests for ETH
+        env:
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS }}
+        run: npm run test
+      - name: Unit tests for BSC
+        env:
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC }}
+        run: npm run test
+      - name: Run coders examples
+        env:
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL }}
+        run: npx hardhat run scripts/coders.ts
+      - name: Run converters examples
+        env:
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL }}
+        run: npx hardhat run scripts/converters.ts
+      - name: Run API Client examples for ETH
+        env:
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS }}
+          API_KEY: ${{ secrets.APY_KEY }}
+        run: npx hardhat run scripts/api-client.ts
+      - name: Run API Client examples for BSC
+        env:
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC }}
+          API_KEY: ${{ secrets.APY_KEY_BSC }}
+        run: npx hardhat run scripts/api-client.ts
+      - name: Run proof verification example for ETH
+        env:
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          API_KEY: ${{ secrets.APY_KEY }}
+        run: npx hardhat run scripts/proof-verification.ts
+      - name: Run proof verification example for BSC
+        env:
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL_BSC }}
+          API_KEY: ${{ secrets.APY_KEY_BSC }}
+        run: npx hardhat run scripts/proof-verification.ts

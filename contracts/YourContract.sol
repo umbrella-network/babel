@@ -21,38 +21,31 @@ contract YourContract {
         registry = IRegistry(_registry);
     }
 
-    function blockInfo(uint256 _blockHeight) public {
-        console.log("Fetching block from UMB Network for block height", _blockHeight);
+    function blockInfo(uint256 _blockId) public {
+        console.log("Fetching block from UMB Network for block id", _blockId);
 
-        IChain.Block memory blockData = _chain().getBlockData(_blockHeight);
+        IChain.Block memory blockData = _chain().blocks(_blockId);
 
         console.log("root:");
         console.logBytes32(blockData.root);
-        console.log("timestamp:", blockData.timestamp);
-        console.log("blockchain block number (anchor):", blockData.anchor);
-        console.log("minter:", blockData.minter);
+        console.log("timestamp:", blockData.dataTimestamp);
     }
 
     function latestBlockInfo() public {
-        blockInfo(_chain().getLatestBlockHeightWithData());
+        blockInfo(_chain().getLatestBlockId());
     }
 
-    function getPrice(uint256 _blockHeight, bytes32 _key) public view returns (uint256) {
-        console.log("Fetching data from UMB Network for block height", _blockHeight);
+    function getPrice(bytes32 _key) public view returns (uint256) {
+        console.log("Fetching data from UMB Network");
 
-        (uint256 value, uint256 timestamp) = _chain().getNumericFCD(_blockHeight, _key);
+        (uint256 value, uint256 timestamp) = _chain().getCurrentValue(_key);
+
+        require(timestamp > 0, "value does not exists");
 
         console.log("key:");
         console.logBytes32(_key);
         console.log("value=", value);
         console.log("timestamp=", timestamp);
-
-        return value;
-    }
-
-    function getCurrentPrice(bytes32 _key) public view returns (uint256) {
-        (uint256 value, uint256 timestamp) = _chain().getCurrentValue(_key);
-        require(timestamp > 0, "value does not exists");
 
         return value;
     }

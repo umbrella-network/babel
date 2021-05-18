@@ -13,7 +13,7 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: process.env.RPC_URL as string,
+        url: process.env.BLOCKCHAIN_PROVIDER_URL as string,
       }
     }
   },
