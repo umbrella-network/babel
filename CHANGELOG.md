@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - support optimised version of Umbrella:
   - only latest FCDs
   - minimum storage on chain
+  - optimised coders
 
 ## Fixed
 - fix usage of ENV variables

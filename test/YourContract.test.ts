@@ -1,8 +1,7 @@
-import {ethers} from 'hardhat';
-import {expect} from 'chai';
-import {Contract} from 'ethers';
-import {converters} from '@umb-network/toolbox';
-import {fcdValueToNumber} from '@umb-network/toolbox/dist/converters';
+import { ethers } from 'hardhat';
+import { expect } from 'chai';
+import { Contract, BigNumber } from 'ethers';
+import { LeafKeyCoder, LeafValueCoder } from '@umb-network/toolbox';
 
 // Chain registry address (see https://umbrella-network.readme.io/docs/umb-token-contracts)
 const { REGISTRY_CONTRACT_ADDRESS } = process.env;
@@ -27,9 +26,10 @@ describe('Umbrella - Hello word examples for First Class Data - Layer 1', functi
   });
 
   it('expect to get latest price for BTC-USD', async function () {
-    const price = await yourContract.getPrice(converters.strToBytes32('BTC-USD'));
-    console.log('price: ',price.toString());
-    console.log('price as number', fcdValueToNumber(price));
-    expect(price).to.gt(0);
+    const price: BigNumber = await yourContract.getPrice(LeafKeyCoder.encode('BTC-USD'));
+    console.log('price:', price.toString());
+    const priceAsNumber = LeafValueCoder.decode(price.toHexString());
+    console.log('price as number:', priceAsNumber);
+    expect(priceAsNumber).to.gt(0).and.lt(100000);
   });
 });

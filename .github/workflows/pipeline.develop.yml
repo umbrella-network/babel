@@ -48,10 +48,6 @@ jobs:
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_DEVELOP }}
         run: npx hardhat run scripts/coders.ts
-      - name: Run converters examples
-        env:
-          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_DEVELOP }}
-        run: npx hardhat run scripts/converters.ts
       - name: Run API Client examples for ETH
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_DEVELOP }}
