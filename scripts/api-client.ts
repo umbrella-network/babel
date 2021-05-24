@@ -25,10 +25,10 @@ async function main() {
     const getNewestBlockResult = await apiClient.getNewestBlock(); // {...}
     console.log(getNewestBlockResult);
 
-    const getBlockResult = await apiClient.getBlock(350); // {...}
+    const getBlockResult = await apiClient.getBlock(getNewestBlockResult.blockId); // {...}
     console.log(getBlockResult);
 
-    const getLeavesOfBlockResult = await apiClient.getLeavesOfBlock(350); // [{...}]
+    const getLeavesOfBlockResult = await apiClient.getLeavesOfBlock(getNewestBlockResult.blockId); // [{...}]
     console.log(getLeavesOfBlockResult);
 
     const getProofsResult = await apiClient.getProofs(['ETH-USD']); // {...}

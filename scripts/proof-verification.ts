@@ -18,7 +18,7 @@ async function main() {
 
     const verificationResult = await apiClient.verifyProofForNewestBlock('ETH-USD');
 
-    console.log(verificationResult); // output: {success: true, value: 1234} or throw
+    console.log(verificationResult);
   }
 }
 
