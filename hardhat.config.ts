@@ -21,7 +21,7 @@ const config: HardhatUserConfig = {
     compilers: [
       {
         version: '0.7.5'
-      },
+      }
     ]
   },
 };
