@@ -1,16 +1,16 @@
-import {LeafValueCoder, LeafKeyCoder, LeafType} from '@umb-network/toolbox';
+import { LeafValueCoder, LeafKeyCoder } from '@umb-network/toolbox';
 
 async function main() {
   const f = 1234.0000987;
 
   // encode data for leaf:
-  const leafData: Buffer = LeafValueCoder.encode(f, LeafType.TYPE_FLOAT);
+  const leafData: Buffer = LeafValueCoder.encode(f);
   console.log(leafData);
-  
+
   // decode data
   const originalValue: number = LeafValueCoder.decode(leafData.toString('hex')) as number;
   console.log(originalValue);
-  
+
   // encoder accepts Buffer or hex string
   console.log(LeafKeyCoder.encode('ETH-USD')); // <Buffer 65 74 68 2d 75 73 64>;
   console.log(LeafKeyCoder.decode(Buffer.from('6574682d757364', 'hex'))); // 'ETH-USD'
@@ -22,7 +22,7 @@ async function main() {
 // and properly handle errors.
 main()
   .then(() => process.exit(0))
-  .catch(error => {
+  .catch((error) => {
     console.error(error);
     process.exit(1);
   });

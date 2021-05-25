@@ -1,6 +1,6 @@
 {
   "name": "babel",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Reference application",
   "main": "index.js",
   "scripts": {
@@ -10,6 +10,8 @@
     "lint:ts": "eslint . --ext .js,.jsx,.ts",
     "lint:fix": "npm run lint:ts -- --fix",
     "lint:sol": "solhint \"contracts/**/*.sol\" --max-warnings=0",
+    "prettier:format": "prettier --config .prettierrc 'scripts/**/*.ts' 'test/**/*.ts' --write",
+    "format": "npm run lint:fix && npm run prettier:format",
     "test": "hardhat test"
   },
   "repository": {
@@ -31,7 +33,7 @@
     "@types/node": "^14.14.22",
     "@typescript-eslint/eslint-plugin": "^4.14.1",
     "@typescript-eslint/parser": "^4.14.1",
-    "@umb-network/toolbox": "1.0.0",
+    "@umb-network/toolbox": "2.0.0",
     "chai": "^4.3.0",
     "custom-env": "^2.0.1",
     "eslint": "^7.18.0",
@@ -41,9 +43,9 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^5.0.0",
     "ethereum-waffle": "^3.3.0",
-    "ethers": "^5.0.31",
+    "ethers": "^5.1.4",
     "git-format-staged": "^2.1.1",
-    "hardhat": "^2.1.1",
+    "hardhat": "^2.3.0",
     "husky": "4.3.8",
     "prettier": "^2.2.1",
     "solc": "^0.8.0",
