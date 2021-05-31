@@ -6,8 +6,10 @@ name: Reference App QA - Development
 on:
   push:
     branches: [ develop ]
-  pull_request:
-    branches: [ develop ]
+  
+  repository_dispatch:
+    types:
+      - Reff_App_Test_Develop
 
 jobs:
   build:
@@ -19,6 +21,10 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
+      - name: Event Information
+        if: github.event.action == 'Reff_App_Test_Develop'
+        run: |
+          echo "Event '${{ github.event.action }}' received from '${{ github.event.client_payload.repository }}'"
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
@@ -74,3 +80,19 @@ jobs:
           API_BASE_URL: ${{ secrets.API_BASE_URL_BSC_DEVELOP }}
           API_KEY: ${{ secrets.APY_KEY_BSC_DEVELOP }}
         run: npx hardhat run scripts/proof-verification.ts
+  notify:
+    name: Discord Notification
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    if: ${{ always() }} # You always want to be notified: success, failure, or cancelled
+
+    steps:
+      - name: Notify
+        uses: nobrayner/discord-webhook@v1
+        with:
+          github-token: ${{ secrets.BOT_GITHUB_TOKEN }}
+          discord-webhook: ${{ secrets.DISCORD_NONPROD_WEBHOOK }}
+          title: '${{ github.workflow }}: {{STATUS}}'
+          description: '${{ github.event_name }} trigged this {{STATUS}}!'
+          # include-details: 'false'
