@@ -1,3 +1,5 @@
+[![Reference App QA - Development](https://github.com/umbrella-network/babel/actions/workflows/pipeline.develop.yml/badge.svg?branch=develop)](https://github.com/umbrella-network/babel/actions/workflows/pipeline.develop.yml)
+[![Reference App QA - Production](https://github.com/umbrella-network/babel/actions/workflows/pipeline.yml/badge.svg?branch=main)](https://github.com/umbrella-network/babel/actions/workflows/pipeline.yml)
 # babel
 
 ![Umbrella network - logo](./assets/umb.network-logo.png)
