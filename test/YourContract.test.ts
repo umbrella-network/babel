@@ -2,6 +2,7 @@ import { ethers } from 'hardhat';
 import { expect } from 'chai';
 import { Contract, BigNumber } from 'ethers';
 import { LeafKeyCoder, LeafValueCoder } from '@umb-network/toolbox';
+import {resetFork} from '../scripts/blockchain';
 
 // Chain registry address (see https://umbrella-network.readme.io/docs/umb-token-contracts)
 const { REGISTRY_CONTRACT_ADDRESS } = process.env;
@@ -18,6 +19,11 @@ describe('Umbrella - Hello word examples for First Class Data - Layer 1', functi
   let yourContract: Contract;
 
   before(async () => {
+    /*
+    This is a hotfix for current ropsten issues. We will fork manually.
+    When hardhat starts support forking on ropsten again, we can rollback this fix.
+     */
+    await resetFork();
     yourContract = await setup();
   });
 
