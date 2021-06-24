@@ -6,7 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
-## [2.0.1] - 2021-06-01
+## [1.0.2] - 2021-06-24
+### Changed
+- Use `~` for managing packages versions
+
+### Fixed
+- Add temporary fix for ropsten forking
+
+## [1.0.1] - 2021-06-01
 ### Added
 - Improve tests execution
 - Add Notifications
