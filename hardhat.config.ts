@@ -12,16 +12,9 @@ import {HardhatUserConfig} from 'hardhat/types';
 const config: HardhatUserConfig = {
   networks: {
     hardhat: {
-      /*
-        forking with hardhat stops working for ropsten
-        In order to fix the reference app so we can use it as example
-        we need to fork manually.
-        For now forking with configuration will be disabled,
-        however it is working fine with other networks.
-       */
-      // forking: {
-      //   url: process.env.BLOCKCHAIN_PROVIDER_URL as string,
-      // }
+      forking: {
+        url: process.env.BLOCKCHAIN_PROVIDER_URL as string,
+      }
     }
   },
   solidity: {
