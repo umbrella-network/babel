@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## [1.0.4] - 2021-06-28
+### Added
+- Example for fetching L2 data on-chain
+
+### Remove
+- temporary fix for ropsten forking
+
 ## [1.0.3] - 2021-06-24
 ### Changed
 - downgrade hardhat
