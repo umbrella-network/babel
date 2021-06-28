@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 - revert temporary fix for ropsten
 
+## [1.0.5] - 2021-06-28
+### Fixed
+- Linter errors
+
 ## [1.0.4] - 2021-06-28
 ### Added
 - Example for fetching L2 data on-chain
