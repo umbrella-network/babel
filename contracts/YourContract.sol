@@ -58,8 +58,13 @@ contract YourContract {
         bytes32[] memory _proof,
         bytes memory _key,
         bytes memory _value
-    ) public view returns (bool, uint256) {
-        return (_chain().verifyProofForBlock(_blockId, _proof, _key, _value), _value.toUint());
+    ) public view returns (bool success, uint256 value) {
+        (success, value) = (_chain().verifyProofForBlock(_blockId, _proof, _key, _value), _value.toUint());
+
+        console.log('verification status:', success);
+        require(success, 'proof is invalid, this key-value data can not be trusted');
+
+        console.log('value you can use on-chain:', value);
     }
 
     function _chain() internal view returns (IChain umbChain) {
