@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## [2.0.0] - 2021-06-30
+### Add
+- example for FIXED FCD data
+
+### Updated
+- update SDK to v3.0.0
+
+### Removed
+- revert temporary fix for ropsten
+
 ## [1.0.5] - 2021-06-28
 ### Fixed
 - Linter errors
