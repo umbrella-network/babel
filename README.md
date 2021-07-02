@@ -23,7 +23,7 @@ Setup a dotenv file (`.env`) with local configuration values. Example:
 RPC_URL=https://ropsten.infura.io/v3/***
 
 # UMBrella Contract Registry contract address for ropsten:
-UMB_REGISTRY_ADDRESS=0x8d16D5D2859f4c54b226180A46F26D57A4d727A0
+UMB_REGISTRY_ADDRESS=<get-it-from: https://umbrella-network.readme.io/docs/umb-token-contracts#contract-registry>
 
 # UMBrella API Key:
 API_KEY=0xXXXXXXX
@@ -70,12 +70,6 @@ Run coders examples:
 
 ```shell script
 npx hardhat run scripts/coders.ts
-```
-
-Run converter examples:
-
-```shell script
-npx hardhat run scripts/converters.ts
 ```
 
 Run API Client examples:

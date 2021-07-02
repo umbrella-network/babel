@@ -2,13 +2,14 @@ import { LeafValueCoder, LeafKeyCoder } from '@umb-network/toolbox';
 
 async function main() {
   const f = 1234.0000987;
+  const label = 'A';
 
   // encode data for leaf:
-  const leafData: Buffer = LeafValueCoder.encode(f);
+  const leafData: Buffer = LeafValueCoder.encode(f, label);
   console.log(leafData);
 
   // decode data
-  const originalValue: number = LeafValueCoder.decode(leafData.toString('hex')) as number;
+  const originalValue: number = LeafValueCoder.decode(leafData.toString('hex'), label) as number;
   console.log(originalValue);
 
   // encoder accepts Buffer or hex string
