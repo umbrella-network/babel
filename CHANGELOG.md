@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## [2.0.1] - 2021-07-02
+### Fixed
+- fix coders example
+
+### Removed
+- removed non existed example from readme
+
 ## [2.0.0] - 2021-06-30
 ### Add
 - example for FIXED FCD data
