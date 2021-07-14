@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## [2.1.0] - 2021-07-02
+### Added
+- add examples for price calculation based on FCD and L2
+
+### Changeed
+- order of steps for workflow 
+
 ## [2.0.1] - 2021-07-02
 ### Fixed
 - fix coders example
