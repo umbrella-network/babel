@@ -34,9 +34,11 @@ API_KEY=0xXXXXXXX
 ## First Class Data
 
 For running FCD example, you need to have RPC provider URL
-and you need to setup it into `.env`, see `example.env`.
+and you need to setup `.env`, see `example.env`.
 
-**Note**: Provider URL needs to be for Ropsten testnet.
+**Note**: This example forking a blockchain using hardhat forking feature.
+If you provide RPC for BSC mainnet or ETH Ropsten (atm this are our two main environments)
+You will have access to all Umbrella feeds (Layer 2 and FCD). 
 
 Then open console and run
 
