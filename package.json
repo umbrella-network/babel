@@ -1,6 +1,6 @@
 {
   "name": "babel",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Umbrella Network - Reference application",
   "main": "index.js",
   "scripts": {
