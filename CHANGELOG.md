@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## [2.1.2] - 2021-07-14
+### Fixed
+- fix workflow file format
+
 ## [2.1.1] - 2021-07-14
 ### Fixed
 - linter errors
