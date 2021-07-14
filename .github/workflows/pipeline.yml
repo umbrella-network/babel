@@ -39,31 +39,40 @@ jobs:
         run: npm run lint:sol
       - name: JS Lint
         run: npm run lint:ts
-      - name: Unit tests for ETH
+      - name: Run coders examples
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL }}
-          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS }}
-        run: npm run test
+        run:
+          npx hardhat run scripts/coders.ts
       - name: Unit tests for BSC
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC }}
         run: npm run test
-      - name: Run coders examples
-        env:
-          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL }}
-        run: npx hardhat run scripts/coders.ts
-      - name: Run API Client examples for ETH
-        env:
-          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL }}
-          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS }}
-          API_KEY: ${{ secrets.APY_KEY }}
-        run: npx hardhat run scripts/api-client.ts
       - name: Run API Client examples for BSC
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC }}
           API_KEY: ${{ secrets.APY_KEY_BSC }}
+        run: npx hardhat run scripts/api-client.ts
+      - name: Run proof verification example for BSC
+        env:
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL_BSC }}
+          API_KEY: ${{ secrets.APY_KEY_BSC }}
+        run:
+          npx hardhat run scripts/proof-verification.ts
+      - name: Unit tests for ETH
+        env:
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS }}
+        run: npm run test
+      - name: Run API Client examples for ETH
+        env:
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS }}
+          API_KEY: ${{ secrets.APY_KEY }}
         run: npx hardhat run scripts/api-client.ts
       - name: Run proof verification example for ETH
         env:
@@ -71,13 +80,6 @@ jobs:
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS }}
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
           API_KEY: ${{ secrets.APY_KEY }}
-        run: npx hardhat run scripts/proof-verification.ts
-      - name: Run proof verification example for BSC
-        env:
-          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC }}
-          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC }}
-          API_BASE_URL: ${{ secrets.API_BASE_URL_BSC }}
-          API_KEY: ${{ secrets.APY_KEY_BSC }}
         run: npx hardhat run scripts/proof-verification.ts
   notify:
     name: Discord Notification
