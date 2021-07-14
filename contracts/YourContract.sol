@@ -14,7 +14,7 @@ contract YourContract {
     using ValueDecoder for bytes32;
 
     // by default, all values stored in Umbrella are stored as numbers with 18 decimals
-    uint256 constant MULTIPLIER = 1e18;
+    uint256 constant public MULTIPLIER = 1e18;
 
     // registry wit all contract addresses, most important is `Chain`
     IRegistry public registry;
@@ -70,12 +70,6 @@ contract YourContract {
         console.log("value you can use on-chain:", value);
     }
 
-    function _chain() internal view returns (IChain umbChain) {
-        umbChain = IChain(registry.getAddress("Chain"));
-        console.log("umbChain:");
-        console.logAddress(address(umbChain));
-    }
-
     function calculatePrice(uint256 _value1, uint256 _value2) public view returns (uint256 price) {
         price = _value1 * MULTIPLIER / _value2;
 
@@ -110,7 +104,7 @@ contract YourContract {
 
         for (uint256 i = 0; i < results.length; i++) {
             console.log("Verifying proof #", i);
-            require(results[i], 'invalid proof');
+            require(results[i], "invalid proof");
         }
 
         console.log("Data verified!");
@@ -118,5 +112,11 @@ contract YourContract {
         console.log("uint value #2", _values[1].toUint());
 
         return calculatePrice(_values[0].toUint(), _values[1].toUint());
+    }
+
+    function _chain() internal view returns (IChain umbChain) {
+        umbChain = IChain(registry.getAddress("Chain"));
+        console.log("umbChain:");
+        console.logAddress(address(umbChain));
     }
 }
