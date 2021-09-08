@@ -1,6 +1,6 @@
 {
   "name": "babel",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Umbrella Network - Reference application",
   "main": "index.js",
   "scripts": {
@@ -34,7 +34,7 @@
     "@types/node": "~14.14.22",
     "@typescript-eslint/eslint-plugin": "~4.14.1",
     "@typescript-eslint/parser": "~4.14.1",
-    "@umb-network/toolbox": "~4.0.1",
+    "@umb-network/toolbox": "^4.1.1",
     "chai": "~4.3.0",
     "custom-env": "~2.0.1",
     "eslint": "~7.18.0",
@@ -46,7 +46,7 @@
     "ethereum-waffle": "~3.3.0",
     "ethers": "~5.3.1",
     "git-format-staged": "~2.1.1",
-    "hardhat": "~2.3.3",
+    "hardhat": "^2.6.3",
     "husky": "4.3.8",
     "prettier": "~2.2.1",
     "solc": "~0.8.0",
