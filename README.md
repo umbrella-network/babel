@@ -20,10 +20,10 @@ Setup a dotenv file (`.env`) with local configuration values. Example:
 
 ```
 # RPC provider eg. infura
-RPC_URL=https://ropsten.infura.io/v3/***
+BLOCKCHAIN_PROVIDER_URL=https://ropsten.infura.io/v3/***
 
 # UMBrella Contract Registry contract address for ropsten:
-UMB_REGISTRY_ADDRESS=<get-it-from: https://umbrella-network.readme.io/docs/umb-token-contracts#contract-registry>
+REGISTRY_CONTRACT_ADDRESS=<get-it-from: https://umbrella-network.readme.io/docs/umb-token-contracts#contract-registry>
 
 # UMBrella API Key:
 API_KEY=0xXXXXXXX
