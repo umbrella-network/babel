@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## [3.0.1] - 2021-09-09
+### Added
+- Manual execution of github action
 ## [3.0.0] - 2021-08-11
 ### Updated
 - update SDK
