@@ -115,7 +115,7 @@ contract YourContract {
     }
 
     function _chain() internal view returns (IChain umbChain) {
-        umbChain = IChain(registry.getAddress("Chain"));
+        umbChain = IChain(registry.getAddressByString("Chain"));
         console.log("umbChain:");
         console.logAddress(address(umbChain));
     }
