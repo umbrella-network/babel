@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## [3.0.3] - 2021-09-23
+### Updated
+- update ethers.js version
+
 ## [3.0.2] - 2021-09-09
 ### Updated
 - update SDK
@@ -34,7 +38,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - add examples for price calculation based on FCD and L2
 
 ### Changed
-- order of steps for workflow 
+- order of steps for workflow
 
 ## [2.0.1] - 2021-07-02
 ### Fixed
