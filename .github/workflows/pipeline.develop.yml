@@ -6,11 +6,11 @@ name: Reference App QA - Development
 on:
   push:
     branches: [ develop ]
-  
+
   repository_dispatch:
     types:
       - Reff_App_Test_Develop
-  
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -37,7 +37,7 @@ jobs:
       - name: Compile contracts
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_DEVELOP }}
-          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_DEVELOP }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_DEVELOP }}
         run: npm run compile
       - name: Solidity Lint
         run: npm run lint:sol
@@ -56,34 +56,40 @@ jobs:
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC_DEVELOP }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC_DEVELOP }}
-          API_KEY: ${{ secrets.APY_KEY_BSC_DEVELOP }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL_DEVELOP }}
+          API_KEY: ${{ secrets.API_KEY_DEVELOP }}
+          CHAIN_ID: ${{ secrets.CHAIN_ID_BSC }}
         run: npx hardhat run scripts/api-client.ts
       - name: Run proof verification example for BSC
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC_DEVELOP }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC_DEVELOP }}
-          API_BASE_URL: ${{ secrets.API_BASE_URL_BSC_DEVELOP }}
-          API_KEY: ${{ secrets.APY_KEY_BSC_DEVELOP }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL_DEVELOP }}
+          API_KEY: ${{ secrets.API_KEY_DEVELOP }}
+          CHAIN_ID: ${{ secrets.CHAIN_ID_BSC }}
         run: npx hardhat run scripts/proof-verification.ts
       - name: Unit tests for ETH
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_DEVELOP }}
-          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_DEVELOP }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_DEVELOP }}
         run:
           npm run test
       - name: Run API Client examples for ETH
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_DEVELOP }}
-          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_DEVELOP }}
-          API_KEY: ${{ secrets.APY_KEY_DEVELOP }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_DEVELOP }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL_DEVELOP }}
+          API_KEY: ${{ secrets.API_KEY_DEVELOP }}
+          CHAIN_ID: ${{ secrets.CHAIN_ID_ETH }}
         run:
           npx hardhat run scripts/api-client.ts
       - name: Run proof verification example for ETH
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_DEVELOP }}
-          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_DEVELOP }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_DEVELOP }}
           API_BASE_URL: ${{ secrets.API_BASE_URL_DEVELOP }}
-          API_KEY: ${{ secrets.APY_KEY_DEVELOP }}
+          API_KEY: ${{ secrets.API_KEY_DEVELOP }}
+          CHAIN_ID: ${{ secrets.CHAIN_ID_ETH }}
         run: npx hardhat run scripts/proof-verification.ts
   notify:
     name: Discord Notification

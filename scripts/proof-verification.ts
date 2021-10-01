@@ -1,10 +1,10 @@
 import { ContractRegistry, ChainContract, APIClient } from '@umb-network/toolbox';
 import { ethers } from 'ethers';
 
-const { BLOCKCHAIN_PROVIDER_URL, REGISTRY_CONTRACT_ADDRESS, API_BASE_URL, API_KEY } = process.env;
+const { BLOCKCHAIN_PROVIDER_URL, REGISTRY_CONTRACT_ADDRESS, API_BASE_URL, API_KEY, CHAIN_ID } = process.env;
 
 async function main() {
-  if (BLOCKCHAIN_PROVIDER_URL && REGISTRY_CONTRACT_ADDRESS && API_KEY) {
+  if (BLOCKCHAIN_PROVIDER_URL && REGISTRY_CONTRACT_ADDRESS && API_KEY && CHAIN_ID) {
     const provider = new ethers.providers.JsonRpcProvider(BLOCKCHAIN_PROVIDER_URL);
 
     const contractRegistry = new ContractRegistry(provider, REGISTRY_CONTRACT_ADDRESS);
@@ -14,6 +14,7 @@ async function main() {
       baseURL: API_BASE_URL as string,
       chainContract,
       apiKey: API_KEY,
+      chainId: CHAIN_ID,
     });
 
     const verificationResult = await apiClient.verifyProofForNewestBlock('ETH-USD');
