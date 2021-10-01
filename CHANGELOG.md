@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
-## [3.0.4] - 2021-10-01
+## [3.1.0] - 2021-10-01
 ### Added
 - multichain support
 
