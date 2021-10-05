@@ -1,16 +1,14 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Reference App QA - Development
+name: Reference App QA - Sandbox
 
 on:
   push:
-    branches: [ develop ]
-
+    branches: [ main ]
   repository_dispatch:
     types:
-      - Reff_App_Test_Develop
-
+      - Reff_App_Test
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -25,7 +23,7 @@ jobs:
 
     steps:
       - name: Event Information
-        if: github.event.action == 'Reff_App_Test_Develop'
+        if: github.event.action == 'Reff_App_Test'
         run: |
           echo "Event '${{ github.event.action }}' received from '${{ github.event.client_payload.repository }}'"
       - uses: actions/checkout@v2
@@ -36,59 +34,59 @@ jobs:
       - run: npm install
       - name: Compile contracts
         env:
-          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_DEVELOP }}
-          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_DEVELOP }}
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_SANDBOX }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_SANDBOX }}
         run: npm run compile
       - name: Solidity Lint
         run: npm run lint:sol
       - name: JS Lint
         run: npm run lint:ts
-      - name: Unit tests for BSC
-        env:
-          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC_DEVELOP }}
-          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC_DEVELOP }}
-        run: npm run test
       - name: Run coders examples
         env:
-          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_DEVELOP }}
-        run: npx hardhat run scripts/coders.ts
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_SANDBOX }}
+        run:
+          npx hardhat run scripts/coders.ts
+      - name: Unit tests for BSC
+        env:
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC_SANDBOX }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC_SANDBOX }}
+        run: npm run test
       - name: Run API Client examples for BSC
         env:
-          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC_DEVELOP }}
-          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC_DEVELOP }}
-          API_BASE_URL: ${{ secrets.API_BASE_URL_DEVELOP }}
-          API_KEY: ${{ secrets.API_KEY_DEVELOP }}
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC_SANDBOX }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC_SANDBOX }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL_SANDBOX }}
+          API_KEY: ${{ secrets.API_KEY_SANDBOX }}
           CHAIN_ID: ${{ secrets.CHAIN_ID_BSC }}
         run: npx hardhat run scripts/api-client.ts
       - name: Run proof verification example for BSC
         env:
-          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC_DEVELOP }}
-          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC_DEVELOP }}
-          API_BASE_URL: ${{ secrets.API_BASE_URL_DEVELOP }}
-          API_KEY: ${{ secrets.API_KEY_DEVELOP }}
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC_SANDBOX }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC_SANDBOX }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL_SANDBOX }}
+          API_KEY: ${{ secrets.API_KEY_SANDBOX }}
           CHAIN_ID: ${{ secrets.CHAIN_ID_BSC }}
-        run: npx hardhat run scripts/proof-verification.ts
+        run:
+          npx hardhat run scripts/proof-verification.ts
       - name: Unit tests for ETH
         env:
-          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_DEVELOP }}
-          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_DEVELOP }}
-        run:
-          npm run test
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_SANDBOX }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_SANDBOX }}
+        run: npm run test
       - name: Run API Client examples for ETH
         env:
-          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_DEVELOP }}
-          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_DEVELOP }}
-          API_BASE_URL: ${{ secrets.API_BASE_URL_DEVELOP }}
-          API_KEY: ${{ secrets.API_KEY_DEVELOP }}
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_SANDBOX }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_SANDBOX }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL_SANDBOX }}
+          API_KEY: ${{ secrets.API_KEY_SANDBOX }}
           CHAIN_ID: ${{ secrets.CHAIN_ID_ETH }}
-        run:
-          npx hardhat run scripts/api-client.ts
+        run: npx hardhat run scripts/api-client.ts
       - name: Run proof verification example for ETH
         env:
-          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_DEVELOP }}
-          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_DEVELOP }}
-          API_BASE_URL: ${{ secrets.API_BASE_URL_DEVELOP }}
-          API_KEY: ${{ secrets.API_KEY_DEVELOP }}
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_SANDBOX }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_SANDBOX }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL_SANDBOX }}
+          API_KEY: ${{ secrets.API_KEY_SANDBOX }}
           CHAIN_ID: ${{ secrets.CHAIN_ID_ETH }}
         run: npx hardhat run scripts/proof-verification.ts
   notify:
@@ -103,7 +101,7 @@ jobs:
         uses: nobrayner/discord-webhook@v1
         with:
           github-token: ${{ secrets.BOT_GITHUB_TOKEN }}
-          discord-webhook: ${{ secrets.DISCORD_NONPROD_WEBHOOK }}
+          discord-webhook: ${{ secrets.DISCORD_PROD_WEBHOOK }}
           title: '${{ github.workflow }}: {{STATUS}}'
           description: '${{ github.event_name }} trigged this {{STATUS}}!'
           # include-details: 'false'
