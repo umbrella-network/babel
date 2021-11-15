@@ -34,7 +34,7 @@ jobs:
       - run: npm install
       - name: Compile contracts
         env:
-          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_SANDBOX }}
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_ETH_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_SANDBOX }}
         run: npm run compile
       - name: Solidity Lint
@@ -70,12 +70,12 @@ jobs:
           npx hardhat run scripts/proof-verification.ts
       - name: Unit tests for ETH
         env:
-          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_SANDBOX }}
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_ETH_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_SANDBOX }}
         run: npm run test
       - name: Run API Client examples for ETH
         env:
-          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_SANDBOX }}
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_ETH_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_SANDBOX }}
           API_BASE_URL: ${{ secrets.API_BASE_URL_SANDBOX }}
           API_KEY: ${{ secrets.API_KEY_SANDBOX }}
@@ -83,11 +83,32 @@ jobs:
         run: npx hardhat run scripts/api-client.ts
       - name: Run proof verification example for ETH
         env:
-          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_SANDBOX }}
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_ETH_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_SANDBOX }}
           API_BASE_URL: ${{ secrets.API_BASE_URL_SANDBOX }}
           API_KEY: ${{ secrets.API_KEY_SANDBOX }}
           CHAIN_ID: ${{ secrets.CHAIN_ID_ETH }}
+        run: npx hardhat run scripts/proof-verification.ts
+      - name: Unit tests for POLYGON
+        env:
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_POLYGON_SANDBOX }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_POLYGON_SANDBOX }}
+        run: npm run test
+      - name: Run API Client examples for POLYGON
+        env:
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_POLYGON_SANDBOX }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_POLYGON_SANDBOX }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL_SANDBOX }}
+          API_KEY: ${{ secrets.API_KEY_SANDBOX }}
+          CHAIN_ID: ${{ secrets.CHAIN_ID_POLYGON }}
+        run: npx hardhat run scripts/api-client.ts
+      - name: Run proof verification example for POLYGON
+        env:
+          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_POLYGON_SANDBOX }}
+          REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_POLYGON_SANDBOX }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL_SANDBOX }}
+          API_KEY: ${{ secrets.API_KEY_SANDBOX }}
+          CHAIN_ID: ${{ secrets.CHAIN_ID_POLYGON }}
         run: npx hardhat run scripts/proof-verification.ts
   notify:
     name: Discord Notification
