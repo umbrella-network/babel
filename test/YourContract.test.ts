@@ -1,10 +1,10 @@
 import 'hardhat'; // required for IDE
 import '@nomiclabs/hardhat-ethers'; // required for IDE
-
 import { ethers } from 'hardhat';
 import { expect } from 'chai';
-import { Contract, BigNumber } from 'ethers';
-import { LeafKeyCoder, LeafValueCoder, constants, SortedMerkleTree } from '@umb-network/toolbox';
+import superagent from 'superagent';
+import { BigNumber, Contract } from 'ethers';
+import { constants, LeafKeyCoder, LeafValueCoder, SortedMerkleTree } from '@umb-network/toolbox';
 
 const hash = ethers.utils.solidityKeccak256;
 
@@ -26,37 +26,39 @@ before(async () => {
 
 describe('Umbrella - Hello word examples for First Class Data - Layer 1', function () {
   /**
-   * test output (including console log from smart contract):
+   * below is example of output that this test will produce (including console log from smart contract):
 
    umbChain:
-   0x93bf28bd49870cc789831592824598a7d6a01c98
-   Fetching block from UMB Network for block id 56997
+   0xc11b687cd6061a6516e23769e4657b6efa25d78e
+   Fetching block from UMB Network for block id 219031
    umbChain:
-   0x93bf28bd49870cc789831592824598a7d6a01c98
+   0xc11b687cd6061a6516e23769e4657b6efa25d78e
    root:
-   0xdbce16bc69566d79ecb0f0be3f4fb362d8cb62ece7f5f00238b1df55cc94bc19
-   timestamp: 1625054356
+   0x44342a726bfd78056018160d5d09a89cb8936d2cf39125f7d2dd0ff461bcd97f
+   timestamp: 1639766399
    */
   it('expect to present how to use Chain contract', async function () {
     await yourContract.latestBlockInfo();
   });
 
   /**
-   * test output (including console log from smart contract):
+   * below is example of output that this test will produce (including console log from smart contract):
 
    Fetching data from UMB Network
-   umbChain:
-   0x93bf28bd49870cc789831592824598a7d6a01c98
    key:
    0x000000000000000000000000000000000000000000000000004254432d555344
-   value= 34939250000000000000000
-   timestamp= 1625054356
-   price: 34939250000000000000000
-   price as number: 34939.25
+   umbChain:
+   0xc11b687cd6061a6516e23769e4657b6efa25d78e
+   value= 46699410000000000000000
+   timestamp= 1639766605
+   key as string (label): BTC-USD
+   price: 46699410000000000000000
+   price as number: 46699.41
    */
   it('expect to get latest price for BTC-USD', async function () {
     const label = 'BTC-USD';
     const price: BigNumber = await yourContract.getPrice(LeafKeyCoder.encode(label));
+    console.log('key as string (label):', label);
     console.log('price:', price.toString());
     const priceAsNumber = LeafValueCoder.decode(price.toHexString(), label);
     console.log('price as number:', priceAsNumber);
@@ -72,8 +74,16 @@ describe('Umbrella - Hello word examples for First Class Data - Layer 1', functi
       console.log('value as number:', valueAsNumber);
       expect(valueAsNumber.toString()).to.eql(value.toString());
     } catch (e) {
-      console.log('label for this example may not exists, but this is not error');
+      if (e.message.includes('missing trie node')) {
+        throw Error(e);
+      }
+
       console.warn(e);
+
+      console.log('\n\nNOTICE\n\n');
+      console.log('label for this example may not exists as FCD, but this is not error');
+      console.log('this test is here just to present, how to read FCD values, when type for it is FIXED');
+      console.log('\n\nNOTICE\n\n');
     }
   });
 
@@ -90,9 +100,10 @@ describe('Umbrella - Hello word examples for First Class Data - Layer 1', functi
    value as number: 16.18741950130188
    */
   it('calculate price based on two different feeds', async function () {
+    const bscUsd = 'BTC-USD';
+    const ethUsd = 'ETH-USD';
+
     try {
-      const bscUsd = 'BTC-USD';
-      const ethUsd = 'ETH-USD';
       const price: BigNumber = await yourContract.calculateEthBtcPriceFCDExample(
         [bscUsd, ethUsd].map(LeafKeyCoder.encode),
       );
@@ -100,8 +111,16 @@ describe('Umbrella - Hello word examples for First Class Data - Layer 1', functi
       const priceAsNumber = LeafValueCoder.decode(price.toHexString(), '');
       console.log('value as number:', priceAsNumber);
     } catch (e) {
-      console.log('in case keys for this example not exists, this test might throw, but this is not an error');
+      if (e.message.includes('missing trie node')) {
+        throw Error(e);
+      }
+
       console.warn(e);
+
+      console.log('\n\nNOTICE\n\n');
+      console.log(`in case keys (${bscUsd}, ${ethUsd}) for this example not exists as Layer2 data, `);
+      console.log('this test might throw, but this is not an error, you can use keys that exists and it will work');
+      console.log('\n\nNOTICE\n\n');
     }
   });
 });
@@ -111,54 +130,80 @@ describe('Umbrella - Hello word examples for fetching L2 data on-chain', functio
    * test output (including console log from smart contract):
 
    umbChain:
-   0x93bf28bd49870cc789831592824598a7d6a01c98
+   0xc11b687cd6061a6516e23769e4657b6efa25d78e
    verification status: true
-   value you can use on-chain: 34800910000000000000000
+   value you can use on-chain: 46982130000000000000000
    */
-  it('expect to fetch L2 data securely on-chain', async function () {
+  it('hardcoded example', async function () {
     // all this data are available via Umbrella API
-    const blockId = 53557;
+    const blockId = 219055;
+
     const proof = [
-      '0x9f6ec43bda049c7170a46ab9a5f8c968e97b7833dddd69fd28e898e724a61677',
-      '0x2b644b91eccb6076b40ea5ee3b343025ae0309d479396323717962776d30568f',
-      '0x74b0e87901af62f880f12fe4f60a0b2a02a1df20bd70fe8b5b3391e289420fbc',
-      '0x23e02b8bd867ecdeb6db76b39f45a6189911c13a67ffefc27f67fc57009274e4',
-      '0x23aec4a6a03f1f14a166b0e21b2a62ed5f30fc2f55747d33197e78ae1a964fb0',
-      '0xdcf62463d7fe1c3da83bc3ce80cdcd95a56fca5d1182187f674ee4fabb74861c',
-      '0xb8a978d7f8739a071ca2672df669b1bc5c9d6a36296e81e2efa26bbef8aefc44',
-      '0xf258b2e25c8358545b448d09de381ea88f7d4edb6d2b7c9355a2ead16178531b',
-      '0x13f8daeb0d4ff3145a1296833d42d178c24759414adfa8c2ce7a7d5901132216',
-      '0x6e99c32f435b8ef3af23d1a9cfc8b6ba2de87897285142c3e09a2fcff578f10d',
-      '0xde29bd1dcea144d7b9cd6330ea15a347eaaa44449c55744fb022510517faa36b',
+      '0x7e6b937312b7f3c23823a480c58baef994816da1837fff208d487f351aa791c2',
+      '0x2c1ad6d0ce6fd17debaf406c3d4c8712f8e03e1d18bba267e4dce05e5cec438c',
+      '0xb6e7f4ba0ad1958dcf4b0efc3fcee50a7f886f8ba76128808123a1e4f3d048ee',
+      '0x33e9662a125dbd8f6bdd236a29a57bb1fb70685502d0db0f176fe132a8e229a8',
+      '0xd030e49f96ba2f6983cc5c48e77ebe9190b52d8930579a4b288bf6d8b005d119',
+      '0xf0ee61771f4eec141f56f28aa3d8ebe7709078b28b5a41a76192568906742089',
+      '0x7b10147d64621e70fe27076b7ee21812449b555d081f6c7647b0d9e63d64a22d',
+      '0x153f0d7ee99d08880492cbc15c0a97cdee2b237c71c0ec1194d180a15150208f',
+      '0xef01c663be4175b4e244dcb4e5365b52a5a38642f1b2cb3ebbe96d4664b3f6b2',
+      '0x7e4ea75a717b17dfa18d5109d374a300a1eb911121cb1fab18a409cb534990ee',
+      '0xc75b8e21b693481e48f4174bd0b96eb7796dec095740053e8d713b103ead5e68',
     ];
     // key=BTC-USD
     const keyBytes = '0x000000000000000000000000000000000000000000000000004254432d555344';
-    const valueBytes = '0x00000000000000000000000000000000000000000000075e8fa4fde0635b0000';
+    const valueBytes = '0x0000000000000000000000000000000000000000000009f2e807e901c7250000';
 
     try {
-      await yourContract.verifyProofForBlockForNumber(blockId, proof, keyBytes, valueBytes);
+      const [success, value]: [boolean, BigNumber] = await yourContract.verifyProofForBlockForNumber(
+        blockId,
+        proof,
+        keyBytes,
+        valueBytes,
+      );
+
+      if (!success) throw Error('not a big deal :) see explanation');
+
+      expect(value.toString()).eql(BigNumber.from(valueBytes).toString());
     } catch (e) {
-      // this proof will work only for BSC for Chain=0x93bf28bd49870cc789831592824598a7d6a01c98
-      // it will throw error on any other scenario because merkle proof will not work for other cases
-      // so it's OK if we have error here
+      if (e.message.includes('missing trie node')) {
+        throw Error(e);
+      }
+
+      console.warn(e);
+
+      console.log('\n\nNOTICE\n\n');
+      console.log(`this proof will work only when blockId=${blockId} excists in current Chain contract`);
+      console.log('verification will be FALSE on any other scenario because merkle proof will not work');
+      console.log("so it's OK if we have error here in that case");
+      console.log('\n\nNOTICE\n\n');
     }
+  });
+
+  // also see https://api.umb.network/docs/
+  it('how to pull list of available Layer2 keys', async function () {
+    const apiResponse = await superagent.get('https://api.umb.network/keys/layer2');
+    const layer2Keys: string[] = apiResponse.body;
+    console.log(`we got ${layer2Keys.length} keys`);
+    expect(layer2Keys.length).gt(100);
   });
 
   /**
    * test output (including console log from smart contract):
 
    umbChain:
-   0xa90068cdc31812d075e4eb5b88b3ed8137ee4a9f
+   0xc11b687cd6061a6516e23769e4657b6efa25d78e
    Verifying proof # 0
    Verifying proof # 1
    Data verified!
-   uint value #1 32468450000000000000000
-   uint value #2 1950600000000000000000
-   value 1: 32468450000000000000000
-   value 2: 1950600000000000000000
-   calculated price 16645365528555316312
-   calculated raw price BTC-ETH: {"type":"BigNumber","hex":"0xe70037c1de126458"}
-   price as number: 16.645365528555317
+   uint value #1 46982130000000000000000
+   uint value #2 3899620000000000000000
+   value 1: 46982130000000000000000
+   value 2: 3899620000000000000000
+   calculated price 12047873895405193326
+   calculated raw price BTC-ETH: {"type":"BigNumber","hex":"0xa732a579ba54086e"}
+   price as number: 12.047873895405193
    */
   it('calculate price based on two different feeds', async function () {
     try {
@@ -166,32 +211,34 @@ describe('Umbrella - Hello word examples for fetching L2 data on-chain', functio
       Proofs should be pulled from Umbrella API
       this example is based on BSC mainnet
        */
-      const blockIds = [17568, 17568];
+      const blockIds = [219055, 219055];
 
       const btcProof = [
-        '0x3d8625ddbf2586114295ec805b3065e0baf2fa3eb7dd2a57ada8405ca80ff4ed',
-        '0x8dfefa5aa7a7935acaf0294a896e67950fd698d851198b4e7bc30632eb3652a5',
-        '0x4f7a01e7a65b2fc5ed8e210da303f37edc9c33ef469d26b6b66f41d0c1960aa0',
-        '0x6402b58adb0672aa339a30daad2e8cb88e461d829c54c37f96221c3a52a5d773',
-        '0x4247a4994f9133b464b624a8923943605656d96daaeaef277157b4c5dfe5671b',
-        '0x98cdf1e1beb254d1cbb0559029c7bb27544cf1d3e74f7aa534fb7f08436e0602',
-        '0xd61cc368fa1abc0947e9189c08f35977396a981500feea2b59364416b946e56e',
-        '0x98c2283c01f8f7733c71ba18ab8929b750df8c0172740b8ae7e92427ba3d7b86',
-        '0x4ad8e4bc1bb683b9b4e9468b52da30903bda766032480c2edab520882180621e',
-        '0xc05cb83481a131531c9a98666e8bc95c1f97b10e0f36ea750a3364c2d996ee8a',
+        '0x7e6b937312b7f3c23823a480c58baef994816da1837fff208d487f351aa791c2',
+        '0x2c1ad6d0ce6fd17debaf406c3d4c8712f8e03e1d18bba267e4dce05e5cec438c',
+        '0xb6e7f4ba0ad1958dcf4b0efc3fcee50a7f886f8ba76128808123a1e4f3d048ee',
+        '0x33e9662a125dbd8f6bdd236a29a57bb1fb70685502d0db0f176fe132a8e229a8',
+        '0xd030e49f96ba2f6983cc5c48e77ebe9190b52d8930579a4b288bf6d8b005d119',
+        '0xf0ee61771f4eec141f56f28aa3d8ebe7709078b28b5a41a76192568906742089',
+        '0x7b10147d64621e70fe27076b7ee21812449b555d081f6c7647b0d9e63d64a22d',
+        '0x153f0d7ee99d08880492cbc15c0a97cdee2b237c71c0ec1194d180a15150208f',
+        '0xef01c663be4175b4e244dcb4e5365b52a5a38642f1b2cb3ebbe96d4664b3f6b2',
+        '0x7e4ea75a717b17dfa18d5109d374a300a1eb911121cb1fab18a409cb534990ee',
+        '0xc75b8e21b693481e48f4174bd0b96eb7796dec095740053e8d713b103ead5e68',
       ];
 
       const ethProof = [
-        '0xda2dade13ce18ba8d167c9f76b07f5aac982c98a4bbef0cd9cd64b6744da5013',
-        '0x7d1a322ef5de4ad4c5f5ecc0c693f401cfc799cb95a83d01f8ce072b0a215354',
-        '0xd2d3d9264f30a2e8527d578f7d89aaf5d89018c78751302888da229d4bd8ea5e',
-        '0x87935f3b4b351a2f354325a4c4db1f98f58c1f40d53b53f6ec80a342fac60e23',
-        '0x8e0b3f34bd794139773830ff1df45f8ec9dc16b3e3efeea5c49da7cb7dcca0c7',
-        '0xee9e1382798cf26ae88e15de0744b7f44c4b09617427c56f51eea449b82b2744',
-        '0x138802138027b954444786cd347fba5f72b46ed87a9738fe0361ede67f70170a',
-        '0x5a4bd75a5603d2ae0d0d8f8c521f045b89a73bb927a1765209a50a1722147dac',
-        '0x2e24c23afc65c28361c5f060e25a05ce69413dfe6db272bbc87b1d32f5813934',
-        '0x7b092aa2545f230b629efd89e3644629e094f6b612f3d5d4566c32963ce3880c',
+        '0x7f83b8bdb97b80cd71756985f4d5a4804a1ba3c70b2c94ce8ecd928d69ae444d',
+        '0x294b55e5a3e2b7d20cc187e826d61cfbc81f7df8cc927eca6b1ad5ad59b3ce92',
+        '0xd14bc7a4042a56e65c3f6154508585eb5e925e97dadf7ac420c13849e10064b4',
+        '0xce5eb7248e88e2efc1e83fd44d20008a9033c4637b3efcd8cf01374013e16d78',
+        '0x22cb86f9ad6f9d0089ef1ed5041577260f61593c535e9803072e6402e3dfe872',
+        '0xf046574ad63640af85dac2d3fbd77cd0c1ef90c6f67055340df255d728dada82',
+        '0x8aa6a8ff7afa7e89ba528a7ba204ad60ac08facf0f85b029e362be0b1a94a725',
+        '0xe7a3262be1fac0626363234d26db7219f04fd57aee4c2156fd827989b92448cf',
+        '0x80086658a0a17c46f9fd9193e10addf10ba5349920c89345e0589075789f8ed7',
+        '0x82520d2a1edead3cdcccd555020992cb2ca8b2c447a4fec796a1a965044348ed',
+        '0xc75b8e21b693481e48f4174bd0b96eb7796dec095740053e8d713b103ead5e68',
       ];
 
       const { proofs, proofItemsCounter } = SortedMerkleTree.flattenProofs([btcProof, ethProof]);
@@ -199,8 +246,8 @@ describe('Umbrella - Hello word examples for fetching L2 data on-chain', functio
       const keys = [LeafKeyCoder.encode('BTC-USD'), LeafKeyCoder.encode('ETH-USD')];
 
       const values = [
-        '0x0000000000000000000000000000000000000000000006e01e4271c77bbd0000', // BTC-USD value in bytes from API
-        '0x000000000000000000000000000000000000000000000069be034d473cf40000', // ETH-USD value in bytes from API
+        '0x0000000000000000000000000000000000000000000009f2e807e901c7250000', // BTC-USD value in bytes from API
+        '0x0000000000000000000000000000000000000000000000d3661950ed80ca0000', // ETH-USD value in bytes from API
       ];
 
       // this is how we can create merkle leaves off-chain
@@ -223,8 +270,11 @@ describe('Umbrella - Hello word examples for fetching L2 data on-chain', functio
       const priceAsNumber = LeafValueCoder.decode(price.toHexString(), '');
       console.log('price as number:', priceAsNumber);
     } catch (e) {
-      console.log('in case keys for this example not exists, this test might throw, but this is not an error');
+      if (e.message.includes('missing trie node')) {
+        throw Error(e);
+      }
       console.warn(e);
+      console.log('in case keys for this example not exists, this test might throw, but this is not an error');
     }
   });
 });
