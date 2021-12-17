@@ -29,6 +29,10 @@ REGISTRY_CONTRACT_ADDRESS=<get-it-from: https://umbrella-network.readme.io/docs/
 API_KEY=0xXXXXXXX
 ```
 
+# API - interactive documentation
+
+https://api.umb.network/docs/
+
 # Run examples
 
 ## First Class Data

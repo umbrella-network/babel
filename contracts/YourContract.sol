@@ -62,7 +62,17 @@ contract YourContract {
         bytes memory _key,
         bytes memory _value
     ) public view returns (bool success, uint256 value) {
-        (success, value) = (_chain().verifyProofForBlock(_blockId, _proof, _key, _value), _value.toUint());
+        return verifyProofForBlockForNumberOnChain(_blockId, _proof, _key, _value, _chain());
+    }
+
+    function verifyProofForBlockForNumberOnChain(
+        uint32 _blockId,
+        bytes32[] memory _proof,
+        bytes memory _key,
+        bytes memory _value,
+        IChain chain
+    ) public view returns (bool success, uint256 value) {
+        (success, value) = (chain.verifyProofForBlock(_blockId, _proof, _key, _value), _value.toUint());
 
         console.log("verification status:", success);
         require(success, "proof is invalid, this key-value data can not be trusted");
