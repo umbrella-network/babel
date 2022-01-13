@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+### Added
+- L2Notifier contract
+- Example implementation of Subscriber
+- README instructions on how it should work and where to find more information about L2D
+
 ## [3.3.1] - 2021-12-17
 ### Updated
 - update test examples, better errors description
