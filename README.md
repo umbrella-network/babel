@@ -89,3 +89,17 @@ Run a proof verification example:
 ```shell script
 npx hardhat run scripts/proof-verification.ts
 ```
+
+## Layer 2 Data Subscription
+
+In this repository there is a system composed by `contracts/ExampleContract.sol` and `contracts/L2Notifier`. The idea here is to have a contract that subscribes for a certain data at some future block. This data can be any Layer 2 Data like some cryptocurrency price or the Random Number (0x0000000000000000000000000000000000000000000046495845445f52414e44, decoded as `FIXED_RAND`).
+
+### L2Notifier.sol
+
+This contract is both where you `register` your delivery request and expects to be `notified` when your data is ready. An off-chain worker will be needed to fetch the data from [Umbrella's API](https://umbrella-network.readme.io/docs) (block id, key, value and Merkle Proof). 
+
+Example: listen to blocks minted by [Umbrella's Chain Contract](https://umbrella-network.readme.io/docs/umb-token-contracts) and when the desired block height is minted, fetch data and start a delivery from your worker towards L2Notifier. Notifier, at it's time, will call the `ExampleContract` (here as the receiver) with the provided data and the proof checked, assuring the data is valid. 
+
+### ExampleContract.sol
+
+This contract holds the logic for the customer side. It implements an interface that verifies if the caller is the authorized contract and some other utilities, as the receiver's business logic requires.
