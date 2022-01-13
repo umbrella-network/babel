@@ -49,35 +49,6 @@ contract ExampleContract is L2Subscriber {
     return true;
   }
 
-  function blockInfo(uint256 _blockId) public view {
-    console.log("Fetching block from UMB Network for block id", _blockId);
-
-    IChain.Block memory blockData = _chain().blocks(_blockId);
-
-    console.log("root:");
-    console.logBytes32(blockData.root);
-    console.log("timestamp:", blockData.dataTimestamp);
-  }
-
-  function latestBlockInfo() public view {
-    blockInfo(_chain().getLatestBlockId());
-  }
-
-  function getPrice(bytes32 _key) public view returns (uint256) {
-    console.log("Fetching data from UMB Network");
-    console.log("key:");
-    console.logBytes32(_key);
-
-    (uint256 value, uint256 timestamp) = _chain().getCurrentValue(_key);
-
-    require(timestamp > 0, "value does not exists");
-
-    console.log("value=", value);
-    console.log("timestamp=", timestamp);
-
-    return value;
-  }
-
   function _chain() internal view returns (IChain umbChain) {
     umbChain = IChain(registry.getAddressByString("Chain"));
     console.log("umbChain:");

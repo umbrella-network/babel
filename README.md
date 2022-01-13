@@ -96,7 +96,7 @@ In this repository there is a system composed by `contracts/ExampleContract.sol`
 
 ### L2Notifier.sol
 
-This contract is both where you `register` your delivery request and expects to be `notified` when your data is ready. An off-chain worker will be needed to fetch the data from [Umbrella's API](https://umbrella-network.readme.io/docs) (block id, key, value and Merkle Proof). 
+This contract is both where you `register` your delivery request and expects to be `notified` when your data is ready. An off-chain worker will be needed to fetch the data from [Umbrella's API](https://umbrella-network.readme.io/docs) (block id, key, value and Merkle Proof). [Reference](https://github.com/umbrella-network/canvas#apiclientgetproofs) on how to get L2D with Umbrella's Toolbox.
 
 Example: listen to blocks minted by [Umbrella's Chain Contract](https://umbrella-network.readme.io/docs/umb-token-contracts) and when the desired block height is minted, fetch data and start a delivery from your worker towards L2Notifier. Notifier, at it's time, will call the `ExampleContract` (here as the receiver) with the provided data and the proof checked, assuring the data is valid. 
 

@@ -1,4 +1,3 @@
-// import hre from 'hardhat'; // required for IDE
 import '@nomiclabs/hardhat-ethers'; // required for IDE
 import { ethers } from 'hardhat';
 import { expect } from 'chai';
