@@ -31,6 +31,9 @@ describe('L2Notifier', () => {
     expect(await L2Notifier.registry()).to.eq(REGISTRY_CONTRACT_ADDRESS);
   });
 
+  // Check the supported keys in:
+  // https://api.umb.network/keys/layer2
+  // https://api.sbx.umb.network/keys/layer2
   describe('L2Notifier::register', function () {
     it('registers for some key in the future', async function () {
       const key = `0x${LeafKeyCoder.encode('FIXED_RAND1').toString('hex')}`;

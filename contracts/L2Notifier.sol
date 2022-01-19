@@ -6,6 +6,9 @@ import "@umb-network/toolbox/dist/contracts/IChain.sol";
 
 import "./interface/L2Subscriber.sol";
 
+/// @title Umbrella L2Notifier
+/// @notice Contract that receives a delivery request, verifies data and delivers it
+/// @dev Developers may implement this deliverer by their own.
 contract L2Notifier {
   IRegistry public immutable registry;
 
@@ -19,6 +22,9 @@ contract L2Notifier {
     registry = IRegistry(_registry);
   }
 
+  /// @notice Register new delivery request, to future block
+  /// @param _key bytes32 encoded key
+  /// @param _minBlockId minimum Umbrella's sidechain block number to deliver data
   function register(bytes32 _key, uint32 _minBlockId) external returns (bool success) {
     address subscriber = msg.sender;
     bytes32 subscriptionId = resolveId(subscriber, _key);
@@ -35,7 +41,14 @@ contract L2Notifier {
 
     return true;
   }
-
+  
+  /// @notice Notify receiver that its data is ready.
+  /// @param _subscriber Receiver Contract address
+  /// @param _blockId Umbrella's sidechain block number
+  /// @param _key bytes32 encoded key
+  /// @param _value value of the given key
+  /// @param _proof merkle proof of the layer 2 data
+  /// @dev This function already verifies Merkle Proof, so you don't need to verify it at receiver side
   function notify(
     address _subscriber,
     uint32 _blockId,
@@ -71,6 +84,7 @@ contract L2Notifier {
     return true;
   }
 
+  /// @notice combines subscriber address with key to have an unique id
   function resolveId(address _subscriber, bytes32 _key) public pure returns (bytes32) {
     return keccak256(abi.encodePacked(_subscriber, _key));
   }

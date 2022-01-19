@@ -12,7 +12,8 @@ import "@umb-network/toolbox/dist/contracts/lib/ValueDecoder.sol";
 import "./interface/L2Subscriber.sol";
 import "./L2Notifier.sol";
 
-
+/// @title Example of L2D receiver
+/// @notice This is an example of customer contract that wants l2d delivered
 contract ExampleContract is L2Subscriber {
   using ValueDecoder for bytes;
   using ValueDecoder for bytes32;
@@ -33,12 +34,17 @@ contract ExampleContract is L2Subscriber {
     registry = IRegistry(_registry);
   }
 
+  /// @notice Subscribes to a future block with the given key
+  /// @param _key the bytes32 encoded key. Can be found at Umbrella's Explorer
   function subscribeL2Value(bytes32 _key) external returns (bool) {
     _notifier().register(_key, _chain().getBlockId() + 10);
 
     return true;
   }
 
+  /// @notice Receives data with the key and value, so customer can do whatever he wants with it
+  /// @param _key bytes32 encoded key, previously subscribed
+  /// @param _value the current value of the given key
   function dataVerified(bytes32 _key, bytes32 _value) external override returns (bool) {
     require(msg.sender == address(_notifier()), "should only called by Umbrella notifier");
 
@@ -49,12 +55,14 @@ contract ExampleContract is L2Subscriber {
     return true;
   }
 
+  /// @dev get chain contract dynamically
   function _chain() internal view returns (IChain umbChain) {
     umbChain = IChain(registry.getAddressByString("Chain"));
     console.log("umbChain:");
     console.logAddress(address(umbChain));
   }
 
+  /// @dev get Umbrella's trusted notifier
   function _notifier() internal view returns (L2Notifier notifier) {
     notifier = L2Notifier(registry.getAddressByString("L2Notifier"));
     console.log("L2Notifier:");
