@@ -36,23 +36,19 @@ contract ExampleContract is L2Subscriber {
 
   /// @notice Subscribes to a future block with the given key
   /// @param _key the bytes32 encoded key. Can be found at Umbrella's Explorer
-  function subscribeL2Value(bytes32 _key) external returns (bool) {
+  function subscribeL2Value(bytes32 _key) external {
     _notifier().register(_key, _chain().getBlockId() + 10);
-
-    return true;
   }
 
   /// @notice Receives data with the key and value, so customer can do whatever he wants with it
   /// @param _key bytes32 encoded key, previously subscribed
   /// @param _value the current value of the given key
-  function dataVerified(bytes32 _key, bytes32 _value) external override returns (bool) {
+  function dataVerified(bytes32 _key, bytes32 _value) external override {
     require(msg.sender == address(_notifier()), "should only called by Umbrella notifier");
 
     // custom code
 
     emit LogSubscriptionReceived(_key, _value);
-
-    return true;
   }
 
   /// @dev get chain contract dynamically

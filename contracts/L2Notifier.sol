@@ -25,7 +25,7 @@ contract L2Notifier {
   /// @notice Register new delivery request, to future block
   /// @param _key bytes32 encoded key
   /// @param _minBlockId minimum Umbrella's sidechain block number to deliver data
-  function register(bytes32 _key, uint32 _minBlockId) external returns (bool success) {
+  function register(bytes32 _key, uint32 _minBlockId) external {
     address subscriber = msg.sender;
     bytes32 subscriptionId = resolveId(subscriber, _key);
 
@@ -38,8 +38,6 @@ contract L2Notifier {
     subscriptions[subscriptionId] = _minBlockId;
 
     emit LogSubscriptionCreated(subscriber, _key);
-
-    return true;
   }
   
   /// @notice Notify receiver that its data is ready.
@@ -55,7 +53,7 @@ contract L2Notifier {
     bytes32 _key,
     bytes32 _value,
     bytes32[] memory _proof
-  ) external returns (bool success) {
+  ) external {
     bytes32 subscriptionId = resolveId(_subscriber, _key);
 
     uint32 minBlockId = subscriptions[subscriptionId];
@@ -80,8 +78,6 @@ contract L2Notifier {
     delete subscriptions[subscriptionId];
 
     L2Subscriber(_subscriber).dataVerified(_key, _value);
-
-    return true;
   }
 
   /// @notice combines subscriber address with key to have an unique id
