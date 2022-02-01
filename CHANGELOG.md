@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## [3.4.1] - 2022-02-01
+### Changed
+- L2Notifier test suite does not try to reach real contracts and blockchains
+
 ## [3.4.0] - 2022-01-27
 ### Added
 - L2Notifier contract
