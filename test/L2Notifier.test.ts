@@ -1,34 +1,68 @@
 import '@nomiclabs/hardhat-ethers'; // required for IDE
-import { ethers } from 'hardhat';
+
 import { expect } from 'chai';
+import { ethers } from 'hardhat';
 import { Contract } from 'ethers';
+import { ABI } from '@umb-network/toolbox';
 import { LeafKeyCoder } from '@umb-network/toolbox';
+import { deployMockContract } from 'ethereum-waffle';
 
-// Chain registry address (see https://umbrella-network.readme.io/docs/umb-token-contracts)
-const { REGISTRY_CONTRACT_ADDRESS } = process.env;
 let L2Notifier: Contract;
+let ExampleContract: Contract;
+let chainContract: Contract;
+let contractRegistry: Contract;
 
-// https://testnet.bscscan.com/address/0x2b964E506cb43aCF78A841CB7F4C51697369CF3D
-const DEPLOYED_L2_NOTIFIER = '0x2b964E506cb43aCF78A841CB7F4C51697369CF3D';
-// https://testnet.bscscan.com/address/0x8efcd35a12F74fa5f5f2722Aee66CE81906B1406
-const DEPLOYED_EXAMPLE_CONTRACT = '0x8efcd35a12F74fa5f5f2722Aee66CE81906B1406';
+const CURRENT_BLOCK = 10;
+const DELIVERY_BLOCK = CURRENT_BLOCK + 10; // rule inside ExampleContract.subscribeL2Value
 
-const setup = async (): Promise<Contract> => {
-  const L2NotifierFactory = await ethers.getContractFactory('L2Notifier');
-  console.log(`deploying L2Notifier with REGISTRY_CONTRACT_ADDRESS=[${REGISTRY_CONTRACT_ADDRESS}]`);
-  const L2Notifier = await L2NotifierFactory.deploy(REGISTRY_CONTRACT_ADDRESS);
-  await L2Notifier.deployed();
+const setup = async (): Promise<Contract[]> => {
+  const [owner] = await ethers.getSigners();
 
-  return L2Notifier;
+  [contractRegistry, chainContract] = await Promise.all([
+    deployMockContract(owner, ABI.registryAbi),
+    deployMockContract(owner, ABI.chainAbi),
+  ]);
+
+  const deployL2Notifier = async () => {
+    const L2NotifierFactory = await ethers.getContractFactory('L2Notifier');
+    const L2Notifier = await L2NotifierFactory.deploy(contractRegistry.address);
+    await L2Notifier.deployed();
+
+    return L2Notifier;
+  };
+
+  const deployExampleContract = async () => {
+    const ExampleContractFactory = await ethers.getContractFactory('ExampleContract');
+    const ExampleContract = await ExampleContractFactory.deploy(contractRegistry.address);
+    await ExampleContract.deployed();
+
+    return ExampleContract;
+  };
+
+  [L2Notifier, ExampleContract] = await Promise.all([deployL2Notifier(), deployExampleContract()]);
+
+  const chainBytes32 = ethers.utils.formatBytes32String('Chain');
+  const l2NotifierBytes32 = ethers.utils.formatBytes32String('L2Notifier');
+
+  await Promise.all([
+    contractRegistry.mock.getAddress.withArgs(chainBytes32).returns(chainContract.address),
+    contractRegistry.mock.getAddressByString.withArgs('Chain').returns(chainContract.address),
+    contractRegistry.mock.getAddress.withArgs(l2NotifierBytes32).returns(L2Notifier.address),
+    contractRegistry.mock.getAddressByString.withArgs('L2Notifier').returns(L2Notifier.address),
+    chainContract.mock.getBlockId.returns(CURRENT_BLOCK),
+    chainContract.mock.verifyProofForBlock.returns(false),
+  ]);
+
+  return [L2Notifier, ExampleContract, chainContract, contractRegistry];
 };
 
 describe('L2Notifier', () => {
-  before(async () => {
-    L2Notifier = await setup();
+  beforeEach(async () => {
+    [L2Notifier, ExampleContract, chainContract, contractRegistry] = await setup();
   });
 
   it('expect Registry to be set', async function () {
-    expect(await L2Notifier.registry()).to.eq(REGISTRY_CONTRACT_ADDRESS);
+    expect(await L2Notifier.registry()).to.eq(contractRegistry.address);
   });
 
   // Check the supported keys in:
@@ -79,8 +113,9 @@ describe('L2Notifier', () => {
     const keyBytes = '0x0000000000000000000000000000000000000000000046495845445f52414e44';
     const valueBytes = '0x305239bb51cb441ff8c2c4d7767a87d4bce4079f9712de615c959ab3c0c37755';
 
-    before(async () => {
-      await L2Notifier.register(keyBytes, 1000000000);
+    beforeEach(async () => {
+      await ExampleContract.subscribeL2Value(keyBytes);
+      await chainContract.mock.getBlockId.returns(DELIVERY_BLOCK);
     });
 
     describe('when there is no subscription for that data', () => {
@@ -95,52 +130,47 @@ describe('L2Notifier', () => {
 
     describe('when trying to deliver earlier than set by contract', () => {
       it('should wait for enough blocks', async function () {
-        const [signer] = await ethers.getSigners();
+        await chainContract.mock.getBlockId.returns(DELIVERY_BLOCK - 1);
 
-        await expect(L2Notifier.notify(signer.address, blockId, keyBytes, valueBytes, proof)).to.be.revertedWith(
-          'should wait for enough blocks',
+        await expect(
+          L2Notifier.notify(ExampleContract.address, blockId, keyBytes, valueBytes, proof),
+        ).to.be.revertedWith('should wait for enough blocks');
+      });
+    });
+
+    describe('when delivered data is faulty', () => {
+      beforeEach(async () => {
+        await chainContract.mock.verifyProofForBlock.returns(false);
+      });
+
+      it('reverts with message "proof is not valid"', async () => {
+        const exampleContractAddress = ExampleContract.address;
+        console.log(ExampleContract.address);
+        console.log(L2Notifier.address);
+
+        await expect(L2Notifier.notify(exampleContractAddress, blockId, keyBytes, keyBytes, proof)).to.be.revertedWith(
+          'proof is not valid',
         );
       });
     });
 
-    // These tests hit BSC testnet.
-    // You'll have to set some provider in the .env
-    describe('-- Integration tests --', () => {
-      describe('when delivered data is faulty', () => {
-        it('reverts with message "proof is not valid"', async function () {
-          const L2NotifierFactory = await ethers.getContractFactory('L2Notifier');
-          const L2Notifier = L2NotifierFactory.attach(DEPLOYED_L2_NOTIFIER);
-
-          await expect(
-            L2Notifier.notify(DEPLOYED_EXAMPLE_CONTRACT, blockId, keyBytes, keyBytes, proof),
-          ).to.be.revertedWith('proof is not valid');
-        });
+    describe('when delivery succeeds', () => {
+      beforeEach(async () => {
+        await chainContract.mock.verifyProofForBlock.returns(true);
       });
 
-      describe('when delivery succeeds', () => {
-        it('emits success notification', async function () {
-          const L2NotifierFactory = await ethers.getContractFactory('L2Notifier');
-          const ExampleContractFactory = await ethers.getContractFactory('ExampleContract');
-
-          const L2Notifier = L2NotifierFactory.attach(DEPLOYED_L2_NOTIFIER);
-          const ExampleContract = ExampleContractFactory.attach(DEPLOYED_EXAMPLE_CONTRACT);
-
-          await expect(L2Notifier.notify(ExampleContract.address, blockId, keyBytes, valueBytes, proof))
-            .to.emit(ExampleContract, 'LogSubscriptionReceived')
-            .withArgs(keyBytes, valueBytes);
-        });
+      it('emits success notification', async function () {
+        await expect(L2Notifier.notify(ExampleContract.address, blockId, keyBytes, valueBytes, proof))
+          .to.emit(ExampleContract, 'LogSubscriptionReceived')
+          .withArgs(keyBytes, valueBytes);
       });
+    });
 
-      describe('when delivering from unauthorized address', () => {
-        it('reverts the delivery with message', async function () {
-          const ExampleContractFactory = await ethers.getContractFactory('ExampleContract');
-
-          const ExampleContract = ExampleContractFactory.attach(DEPLOYED_EXAMPLE_CONTRACT);
-
-          await expect(ExampleContract.dataVerified(keyBytes, valueBytes)).to.be.revertedWith(
-            'should only called by Umbrella notifier',
-          );
-        });
+    describe('when delivering from unauthorized address', () => {
+      it('reverts the delivery with message', async function () {
+        await expect(ExampleContract.dataVerified(keyBytes, valueBytes)).to.be.revertedWith(
+          'should only called by Umbrella notifier',
+        );
       });
     });
   });

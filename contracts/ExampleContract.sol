@@ -30,7 +30,7 @@ contract ExampleContract is L2Subscriber {
   constructor(address _registry) {
     require(_registry != address(0x0), "_registry is empty");
 
-    console.log("Deploying YourContract with Umbrella Registry:", _registry);
+    console.log("Deploying L2Subscriber with Umbrella Registry:", _registry);
     registry = IRegistry(_registry);
   }
 
