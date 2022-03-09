@@ -90,6 +90,12 @@ Run a proof verification example:
 npx hardhat run scripts/proof-verification.ts
 ```
 
+Run Passport examples:
+
+```shell script
+npx hardhat run scripts/Passport/DatumRegistry.ts
+```
+
 ## Layer 2 Data Subscription
 
 In this repository there is a system composed by `contracts/ExampleContract.sol` and `contracts/L2Notifier`. The idea here is to have a contract that subscribes for a certain data at some future block. This data can be any Layer 2 Data like some cryptocurrency price or the Random Number (0x0000000000000000000000000000000000000000000046495845445f52414e44, decoded as `FIXED_RAND`).
