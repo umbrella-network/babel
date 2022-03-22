@@ -1,6 +1,6 @@
 {
   "name": "babel",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "description": "Umbrella Network - Reference application",
   "main": "index.js",
   "scripts": {
@@ -35,7 +35,7 @@
     "@types/superagent": "~4.1.13",
     "@typescript-eslint/eslint-plugin": "~4.14.1",
     "@typescript-eslint/parser": "~4.14.1",
-    "@umb-network/toolbox": "~5.4.0",
+    "@umb-network/toolbox": "~5.8.0",
     "chai": "~4.3.0",
     "custom-env": "~2.0.1",
     "eslint": "~7.18.0",

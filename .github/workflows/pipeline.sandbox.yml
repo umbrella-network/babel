@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [ 14.x ]
+        node-version: [ 16.x ]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -42,16 +42,17 @@ jobs:
       - name: JS Lint
         run: npm run lint:ts
       - name: Run coders examples
-        env:
-          BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_SANDBOX }}
         run:
           npx hardhat run scripts/coders.ts
+
       - name: Unit tests for BSC
+        if: ${{ always() }}
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC_SANDBOX }}
         run: npm run test
       - name: Run API Client examples for BSC
+        if: ${{ always() }}
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC_SANDBOX }}
@@ -60,6 +61,7 @@ jobs:
           CHAIN_ID: ${{ secrets.CHAIN_ID_BSC }}
         run: npx hardhat run scripts/api-client.ts
       - name: Run proof verification example for BSC
+        if: ${{ always() }}
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_BSC_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_BSC_SANDBOX }}
@@ -68,12 +70,15 @@ jobs:
           CHAIN_ID: ${{ secrets.CHAIN_ID_BSC }}
         run:
           npx hardhat run scripts/proof-verification.ts
+      
       - name: Unit tests for ETH
+        if: ${{ always() }}
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_ETH_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_SANDBOX }}
         run: npm run test
       - name: Run API Client examples for ETH
+        if: ${{ always() }}
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_ETH_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_SANDBOX }}
@@ -82,6 +87,7 @@ jobs:
           CHAIN_ID: ${{ secrets.CHAIN_ID_ETH }}
         run: npx hardhat run scripts/api-client.ts
       - name: Run proof verification example for ETH
+        if: ${{ always() }}
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_ETH_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ETH_SANDBOX }}
@@ -89,12 +95,15 @@ jobs:
           API_KEY: ${{ secrets.API_KEY_SANDBOX }}
           CHAIN_ID: ${{ secrets.CHAIN_ID_ETH }}
         run: npx hardhat run scripts/proof-verification.ts
+
       - name: Unit tests for POLYGON
+        if: ${{ always() }}
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_POLYGON_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_POLYGON_SANDBOX }}
         run: npm run test
       - name: Run API Client examples for POLYGON
+        if: ${{ always() }}
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_POLYGON_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_POLYGON_SANDBOX }}
@@ -103,6 +112,7 @@ jobs:
           CHAIN_ID: ${{ secrets.CHAIN_ID_POLYGON }}
         run: npx hardhat run scripts/api-client.ts
       - name: Run proof verification example for POLYGON
+        if: ${{ always() }}
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_POLYGON_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_POLYGON_SANDBOX }}
@@ -110,12 +120,15 @@ jobs:
           API_KEY: ${{ secrets.API_KEY_SANDBOX }}
           CHAIN_ID: ${{ secrets.CHAIN_ID_POLYGON }}
         run: npx hardhat run scripts/proof-verification.ts
+
       - name: Unit tests for AVAX
+        if: ${{ always() }}
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_AVAX_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_AVAX_SANDBOX }}
         run: npm run test
       - name: Run API Client examples for AVAX
+        if: ${{ always() }}
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_AVAX_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_AVAX_SANDBOX }}
@@ -124,6 +137,7 @@ jobs:
           CHAIN_ID: ${{ secrets.CHAIN_ID_AVAX }}
         run: npx hardhat run scripts/api-client.ts
       - name: Run proof verification example for AVAX
+        if: ${{ always() }}
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_AVAX_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_AVAX_SANDBOX }}
@@ -131,12 +145,15 @@ jobs:
           API_KEY: ${{ secrets.API_KEY_SANDBOX }}
           CHAIN_ID: ${{ secrets.CHAIN_ID_AVAX }}
         run: npx hardhat run scripts/proof-verification.ts
+      
       - name: Unit tests for Arbitrum
+        if: ${{ always() }}
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_ARBITRUM_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ARBITRUM_SANDBOX }}
         run: npm run test
       - name: Run API Client examples for Arbitrum
+        if: ${{ always() }}
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_ARBITRUM_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ARBITRUM_SANDBOX }}
@@ -145,6 +162,7 @@ jobs:
           CHAIN_ID: ${{ secrets.CHAIN_ID_ARBITRUM }}
         run: npx hardhat run scripts/api-client.ts
       - name: Run proof verification example for Arbitrum
+        if: ${{ always() }}
         env:
           BLOCKCHAIN_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_ARBITRUM_SANDBOX }}
           REGISTRY_CONTRACT_ADDRESS: ${{ secrets.REGISTRY_CONTRACT_ADDRESS_ARBITRUM_SANDBOX }}
