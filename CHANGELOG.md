@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Unreleased
 ### Added
 - DatumRegistry contract usage examples
+### Changed
+- Run all tests even though one fail
+
 
 ## [3.5.0] - 2022-03-11
 ### Added

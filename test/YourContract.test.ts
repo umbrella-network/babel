@@ -22,7 +22,7 @@ const setup = async (): Promise<Contract> => {
 };
 
 describe('YourContract', () => {
-  before(async () => {
+  beforeEach(async () => {
     yourContract = await setup();
   });
 

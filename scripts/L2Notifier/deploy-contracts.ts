@@ -1,6 +1,8 @@
 import hre, { ethers } from 'hardhat';
 import { Contract } from 'ethers';
 
+import { sleep } from '../../utils/sleep';
+
 async function main() {
   await deployContract('L2Notifier', ['address'], [process.env.REGISTRY_CONTRACT_ADDRESS]);
 
@@ -23,10 +25,6 @@ export const deployContract = async (
 
   return contract;
 };
-
-async function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 // eslint-disable-next-line
 async function verifyCode(address: string, constructorArguments: any): Promise<void> {
