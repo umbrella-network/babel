@@ -179,6 +179,45 @@ jobs:
           API_KEY: ${{ secrets.API_KEY_DEVELOP }}
           CHAIN_ID: ${{ secrets.CHAIN_ID_ARBITRUM }}
         run: npx hardhat run scripts/proof-verification.ts
+
+      # Solana
+      - name: Run API Client examples for Solana
+        if: ${{ always() }}
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL_DEVELOP }}
+          API_KEY: ${{ secrets.API_KEY_DEVELOP }}
+          ANCHOR_WALLET: ${{ secrets.SOLANA_WALLET }}
+          ANCHOR_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_SOLANA_DEVELOP }}
+          SOLANA_CHAIN_PROGRAM_ID: ${{ secrets.SOLANA_CHAIN_PROGRAM_ID_DEVELOP }}
+          SOLANA_CALLER_PROGRAM_ID: ${{ secrets.SOLANA_CALLER_PROGRAM_ID_DEVELOP }}
+        run:
+          echo $ANCHOR_WALLET > my_wallet.json;
+          ANCHOR_WALLET="./my_wallet.json" npx hardhat run ./scripts/solana_fetch_fcd.ts
+      - name: Run proof verification example for Solana
+        if: ${{ always() }}
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL_DEVELOP }}
+          API_KEY: ${{ secrets.API_KEY_DEVELOP }}
+          ANCHOR_WALLET: ${{ secrets.SOLANA_WALLET }}
+          ANCHOR_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_SOLANA_DEVELOP }}
+          SOLANA_CHAIN_PROGRAM_ID: ${{ secrets.SOLANA_CHAIN_PROGRAM_ID_DEVELOP }}
+          SOLANA_CALLER_PROGRAM_ID: ${{ secrets.SOLANA_CALLER_PROGRAM_ID_DEVELOP }}
+        run:
+          echo $ANCHOR_WALLET > my_wallet.json;
+          ANCHOR_WALLET="./my_wallet.json" npx hardhat run ./scripts/solana_verify.ts
+      - name: Run proof verification through cpi-call example for Solana
+        if: ${{ always() }}
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL_DEVELOP }}
+          API_KEY: ${{ secrets.API_KEY_DEVELOP }}
+          ANCHOR_WALLET: ${{ secrets.SOLANA_WALLET }}
+          ANCHOR_PROVIDER_URL: ${{ secrets.BLOCKCHAIN_PROVIDER_URL_SOLANA_DEVELOP }}
+          SOLANA_CHAIN_PROGRAM_ID: ${{ secrets.SOLANA_CHAIN_PROGRAM_ID_DEVELOP }}
+          SOLANA_CALLER_PROGRAM_ID: ${{ secrets.SOLANA_CALLER_PROGRAM_ID_DEVELOP }}
+        run:
+          echo $ANCHOR_WALLET > my_wallet.json;
+          ANCHOR_WALLET="./my_wallet.json" npx hardhat run ./scripts/solana_verify_cpi_call.ts
+
   notify:
     name: Discord Notification
     runs-on: ubuntu-latest

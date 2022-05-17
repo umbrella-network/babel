@@ -4,15 +4,16 @@ import { PublicKey } from '@solana/web3.js';
 import { LeafKeyCoder, LeafValueCoder } from '@umb-network/toolbox';
 import fs from 'fs';
 
-const programId = '9agqAPFMkmekbTT4tcz8NCjL4WT2Ccpu8ayn1SGzVwC3';
+const { SOLANA_CHAIN_PROGRAM_ID } = process.env;
+const chainId = `${SOLANA_CHAIN_PROGRAM_ID}`;
 
-const IDL = JSON.parse(fs.readFileSync('./artifacts/solana-idl/chain.json', 'utf8'));
+const IDL = JSON.parse(fs.readFileSync('./solana-idl/chain.json', 'utf8'));
 
 const main = async () => {
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
 
-  const program = new Program(IDL, new PublicKey(programId), provider);
+  const program = new Program(IDL, new PublicKey(chainId), provider);
 
   const pair = 'BTC-USD';
   const seed = LeafKeyCoder.encode(pair);
