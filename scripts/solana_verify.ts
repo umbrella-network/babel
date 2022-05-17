@@ -14,12 +14,10 @@ import axios from 'axios';
 import fs from 'fs';
 import 'dotenv/config';
 
-const { API_BASE_URL, API_KEY } = process.env;
+const { API_BASE_URL, API_KEY, SOLANA_CHAIN_PROGRAM_ID } = process.env;
+const chainId = `${SOLANA_CHAIN_PROGRAM_ID}`;
 
-// program ID on Sandbox/Mainnet
-const chainId = '4SPgs3L7Ey9VyRuZwx4X3y86LSAZXP2Hhpz9Sps4v3iT';
-
-const IDL = JSON.parse(fs.readFileSync('./artifacts/solana-idl/chain.json', 'utf8'));
+const IDL = JSON.parse(fs.readFileSync('./solana-idl/chain.json', 'utf8'));
 
 const main = async () => {
   const provider = anchor.AnchorProvider.env();
