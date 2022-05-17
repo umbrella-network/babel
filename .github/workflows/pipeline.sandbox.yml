@@ -170,6 +170,28 @@ jobs:
           API_KEY: ${{ secrets.API_KEY_SANDBOX }}
           CHAIN_ID: ${{ secrets.CHAIN_ID_ARBITRUM }}
         run: npx hardhat run scripts/proof-verification.ts
+
+      - name: Fetch FCD using the chain Solana program
+        if: ${{ always() }}
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL_SANDBOX }}
+          API_KEY: ${{ secrets.API_KEY_SANDBOX }}
+        run:
+          ANCHOR_PROVIDER_URL=${{ secrets.BLOCKCHAIN_PROVIDER_URL_SOLANA_SANDBOX }} ANCHOR_WALLET=${{ secrets.SOLANA_WALLET }} ts-node ./scripts/solana_fetch_fcd.ts
+      - name: Verify L2D proofs on Solana calling the chain program directly
+        if: ${{ always() }}
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL_SANDBOX }}
+          API_KEY: ${{ secrets.API_KEY_SANDBOX }}
+        run:
+          ANCHOR_PROVIDER_URL=${{ secrets.BLOCKCHAIN_PROVIDER_URL_SOLANA_SANDBOX }} ANCHOR_WALLET=${{ secrets.SOLANA_WALLET }} ts-node ./scripts/solana_verify.ts
+      - name: Verify L2D proofs on Solana through a cross-program invocation with the caller program 
+        if: ${{ always() }}
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL_SANDBOX }}
+          API_KEY: ${{ secrets.API_KEY_SANDBOX }}
+        run:
+          ANCHOR_PROVIDER_URL=${{ secrets.BLOCKCHAIN_PROVIDER_URL_SOLANA_SANDBOX }} ANCHOR_WALLET=${{ secrets.SOLANA_WALLET }} ts-node ./scripts/solana_verify_cpi_call.ts
   notify:
     name: Discord Notification
     runs-on: ubuntu-latest

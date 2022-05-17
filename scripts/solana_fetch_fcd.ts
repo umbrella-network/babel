@@ -9,7 +9,7 @@ const programId = '9agqAPFMkmekbTT4tcz8NCjL4WT2Ccpu8ayn1SGzVwC3';
 const IDL = JSON.parse(fs.readFileSync('./artifacts/solana-idl/chain.json', 'utf8'));
 
 const main = async () => {
-  const provider = anchor.AnchorProvider.local('https://api.devnet.solana.com');
+  const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
 
   const program = new Program(IDL, new PublicKey(programId), provider);
