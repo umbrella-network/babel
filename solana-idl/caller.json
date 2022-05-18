@@ -1,0 +1,168 @@
+{
+  "version": "0.1.0",
+  "name": "caller",
+  "instructions": [
+    {
+      "name": "cpiCallVerifyTrue",
+      "accounts": [
+        {
+          "name": "cpiReturn",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "block",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "cpiReturnProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "seed",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "cpiCallVerifyFalseTemperedProofs",
+      "accounts": [
+        {
+          "name": "cpiReturn",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "block",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "cpiReturnProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "seed",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "cpiCallVerifyFalseTemperedKey",
+      "accounts": [
+        {
+          "name": "cpiReturn",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "block",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "cpiReturnProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "seed",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "cpiCallVerifyFalseTemperedValue",
+      "accounts": [
+        {
+          "name": "cpiReturn",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "block",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "cpiReturnProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "seed",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "cpiCallVerifyProofForBlock",
+      "accounts": [
+        {
+          "name": "cpiReturn",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "block",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "cpiReturnProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "seed",
+          "type": "bytes"
+        },
+        {
+          "name": "proofs",
+          "type": {
+            "vec": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        },
+        {
+          "name": "key",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "value",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "address": "BmmRtz8Zf4rjQgWT643QG2eqHVkXzebSsnR7XipFTrAg"
+  }
+}
