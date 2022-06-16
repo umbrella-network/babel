@@ -16,21 +16,18 @@ import axios from 'axios';
 import fs from 'fs';
 import 'dotenv/config';
 
-const { API_BASE_URL, API_KEY } = process.env;
+const { API_BASE_URL, API_KEY, SOLANA_CHAIN_PROGRAM_ID, SOLANA_CALLER_PROGRAM_ID } = process.env;
+const chainId = `${SOLANA_CHAIN_PROGRAM_ID}`;
+const callerId = `${SOLANA_CALLER_PROGRAM_ID}`;
 
-const chainId = '4SPgs3L7Ey9VyRuZwx4X3y86LSAZXP2Hhpz9Sps4v3iT';
-const callerId = 'BmmRtz8Zf4rjQgWT643QG2eqHVkXzebSsnR7XipFTrAg';
-
-const IDL = JSON.parse(fs.readFileSync('./artifacts/solana-idl/chain.json', 'utf8'));
-
-const callerIDL = JSON.parse(fs.readFileSync('./artifacts/solana-idl/caller.json', 'utf8'));
+const chainIDL = JSON.parse(fs.readFileSync('./solana-idl/chain.json', 'utf8'));
+const callerIDL = JSON.parse(fs.readFileSync('./solana-idl/caller.json', 'utf8'));
 
 const main = async () => {
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
 
-  const chainProgram = new Program(IDL, new PublicKey(chainId), provider);
-
+  const chainProgram = new Program(chainIDL, new PublicKey(chainId), provider);
   const callerProgram = new Program(callerIDL, new PublicKey(callerId), provider);
 
   // We fetch the last block ID from the API

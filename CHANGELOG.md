@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - StandardDatumReceiver contract
 
+## [3.8.0] - 2022-06-10
+### Added
+- StandardDatumReceiver contract
+
+## [3.7.0] - 2022-05-16
+### Added
+- Scripts to run verification and FCD fetching on Solana
+
 ## [3.6.0] - 2022-03-22
 ### Added
 - DatumRegistry contract usage examples
