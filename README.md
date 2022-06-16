@@ -1,11 +1,11 @@
 [![Reference App QA - Development](https://github.com/umbrella-network/babel/actions/workflows/pipeline.develop.yml/badge.svg?branch=develop)](https://github.com/umbrella-network/babel/actions/workflows/pipeline.develop.yml)
 [![Reference App QA - Production](https://github.com/umbrella-network/babel/actions/workflows/pipeline.yml/badge.svg?branch=main)](https://github.com/umbrella-network/babel/actions/workflows/pipeline.yml)
+
 # babel
 
 ![Umbrella network - logo](./assets/umb.network-logo.png)
 
 Umbrella Network Reference Application
-
 
 # Setup
 
@@ -42,7 +42,7 @@ and you need to setup `.env`, see `example.env`.
 
 **Note**: This example forking a blockchain using hardhat forking feature.
 If you provide RPC for BSC mainnet or ETH Ropsten (atm this are our two main environments)
-You will have access to all Umbrella feeds (Layer 2 and FCD). 
+You will have access to all Umbrella feeds (Layer 2 and FCD).
 
 Then open console and run
 
@@ -70,6 +70,7 @@ minter: 0xdc3ebc37da53a644d67e5e3b5ba4eef88d969d5c
 
   2 passing (11s)
 ```
+
 ## Layer 2 Data
 
 Run coders examples:
@@ -104,8 +105,14 @@ In this repository there is a system composed by `contracts/ExampleContract.sol`
 
 This contract is both where you `register` your delivery request and expects to be `notified` when your data is ready. An off-chain worker will be needed to fetch the data from [Umbrella's API](https://umbrella-network.readme.io/docs) (block id, key, value and Merkle Proof). [Reference](https://github.com/umbrella-network/canvas#apiclientgetproofs) on how to get L2D with Umbrella's Toolbox.
 
-Example: listen to blocks minted by [Umbrella's Chain Contract](https://umbrella-network.readme.io/docs/umb-token-contracts) and when the desired block height is minted, fetch data and start a delivery from your worker towards L2Notifier. Notifier, at it's time, will call the `ExampleContract` (here as the receiver) with the provided data and the proof checked, assuring the data is valid. 
+Example: listen to blocks minted by [Umbrella's Chain Contract](https://umbrella-network.readme.io/docs/umb-token-contracts) and when the desired block height is minted, fetch data and start a delivery from your worker towards L2Notifier. Notifier, at it's time, will call the `ExampleContract` (here as the receiver) with the provided data and the proof checked, assuring the data is valid.
 
 ### ExampleContract.sol
 
 This contract holds the logic for the customer side. It implements an interface that verifies if the caller is the authorized contract and some other utilities, as the receiver's business logic requires.
+
+# Passport
+
+We have provided an example Smart Contract (`contracts/Passport/StandardDatumReceiver.sol`) that receives data from Passport. This Smart Contract is configured to have a variable that stores the minimum time between updates. That means that you can configure that value to `approve` a Pallet every amount of seconds. Note that there is a modifier called `onlyFromDatumRegistry` that is very important to prevent your contract having untrusted deliveries sent to it.
+
+We also provided examples of interaction with the `DatumRegistry` contract, which holds the information needed to have your `Receiver` to receive data. Those examples can be found at `scripts/Passport/DatumRegistry.ts`.
