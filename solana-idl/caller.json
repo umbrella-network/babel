@@ -3,6 +3,17 @@
   "name": "caller",
   "instructions": [
     {
+      "name": "readFcd",
+      "accounts": [
+        {
+          "name": "fcd",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "cpiCallVerifyTrue",
       "accounts": [
         {
@@ -162,7 +173,23 @@
       ]
     }
   ],
+  "types": [
+    {
+      "name": "Error",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "U32ToF64ConversionError"
+          },
+          {
+            "name": "BigIntToU32ConversionError"
+          }
+        ]
+      }
+    }
+  ],
   "metadata": {
-    "address": "BmmRtz8Zf4rjQgWT643QG2eqHVkXzebSsnR7XipFTrAg"
+    "address": "BAxZZXMFKHn4cw2NJTM83uLSuuhF3BBq76WLKvDkz5xj"
   }
 }
