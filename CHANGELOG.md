@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+### Fixed
+- Update Solidity compilers list
+
 ## [3.8.0] - 2022-06-10
 ### Added
 - StandardDatumReceiver contract
